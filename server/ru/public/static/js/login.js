@@ -2,9 +2,13 @@
 $(document).ready(function() {
     // DOM ready
     $(".forget-data").hide();
-
+    $("#erro-login").hide();
     //Load profile if it exits
     loadProfile();
+
+    document.getElementById('login-btn').onclick = function(){
+        login();
+    }
 });
 
 /**
@@ -32,19 +36,71 @@ function login(){
     {
         var saveLocalData = true;
     }
+
+    var formData = {
+        "matricula": $("#matricula").val(),
+        "senha":     $("#password").val()
+    };
+
     //Fazer login aqui
-    
+    var login = false;
+    var loginData = {};
+
+    $.ajax({
+        url: "/api/token",
+        type: 'POST',
+        async: false,
+        data: formData,
+        error : function(err) {
+            console.log('Errod de login!', err)
+        },
+        success: function(data) {
+            if (data["status"]=="OK"){
+                login = true
+                loginData = data
+            }
+        }
+    });
 
     //Mostrar mensagem de erro, se o login falhar
+    if (!login)
+    {
+        $( "#login-container" ).effect( "shake" );
+        $("#erro-login").show();
+        return;
+    }
 
     //Senão
     //Salvar token local
+    localStorage.setItem("token", loginData["token"]);
+    tipo_usuario = loginData["tipo_usuario"];
+
 
     //Salvar dados locais, se o checkbox estiver selecionado
-    testLocalStorageData();
+    if (saveLocalData){
+        $.ajax({
+            url: "/api/saveLocalData",
+            type: 'POST',
+            async: false,
+            data: formData,
+            success: function(data) {
+                localStorage.setItem("PROFILE_IMG_SRC", data["imagem"]);
+                localStorage.setItem("PROFILE_NAME", data["nome"]);
+                localStorage.setItem("PROFILE_MATRICULA", data["matricula"]);
+            },
+            headers: {"Authorization": localStorage.getItem('token')}
+        });
+    }
 
     //Redirecionar para área de usuário
-    location.reload();
+    if (tipo_usuario=="funcionario")
+    {
+        location.assign("/funcionario");
+    }
+    else
+    {
+        location.assign("/aluno");
+    }
 }
 
 function loadProfile() {
@@ -71,11 +127,4 @@ function supportsHTML5Storage() {
     } catch (e) {
         return false;
     }
-}
-
-function testLocalStorageData() {
-    if(!supportsHTML5Storage()) { return false; }
-    localStorage.setItem("PROFILE_IMG_SRC", "//lh3.googleusercontent.com/-6V8xOA6M7BA/AAAAAAAAAAI/AAAAAAAAAAA/rzlHcD0KYwo/photo.jpg?sz=120" );
-    localStorage.setItem("PROFILE_NAME", "Giovanni Cimolin da Silva");
-    localStorage.setItem("PROFILE_MATRICULA", "13106428");
 }

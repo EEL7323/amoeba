@@ -8,32 +8,40 @@
     <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="/static/css/login.css" rel="stylesheet">
     <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 </head>
 <body>
     <br><br><br>
     <img class="logo-main" src="/static/images/logo_ufsc.png" />
 
-    <div class="container">
+    <div class="container" id="login-container">
         <div class="card card-container">
             <img id="profile-img" class="profile-img-card" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" />
             <p id="nome" class="profile-name-card"></p>
-            <form class="form-signin">
+            <form class="form-signin" id="form">
                 <span id="matricula-salva" class="reauth-email"></span>
                 <input type="matricula" id="matricula" class="form-control" placeholder="Matrícula" required autofocus>
                 <input type="password" id="password" class="form-control" placeholder="Senha" required>
+
+
+                <span id="erro-login" class="reauth-email" style="display: inline;color: red;">Usuário ou senha incorretos!</span>
+
                 <div class="checkbox" id="remember_div">
                     <label>
                         <input id="remember" type="checkbox" value="remember-me"> Lembrar de mim
                     </label>
                 </div>
-                <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit" onclick="login()">Entrar</button>
+
+                <button id="login-btn" class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Entrar</button>
             </form><!-- /form -->
             <a href="#" class="forget-data" id="forget" onclick="forgetProfile()">
                 Acessar outra conta
             </a>
         </div><!-- /card-container -->
     </div><!-- /container -->
+    <script src="/static/js/jquery.sha1.js"></script>
     <script src="/static/js/login.js"></script>
 </body>
 </html>
