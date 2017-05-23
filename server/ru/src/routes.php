@@ -2,9 +2,8 @@
 // Routes
 
 $app->get('/[{name}]', function ($request, $response, $args) {
-    // Sample log message
-    $this->logger->info("Slim-Skeleton '/' route");
-
-    // Render index view
-    return $this->renderer->render($response, 'index.phtml', $args);
+    $this->logger->info("Rota: '/' route");
+    return $this->view->render($response, 'login.html', [
+	'name' => $args['name']
+    ]);
 });
