@@ -1,15 +1,24 @@
 <?php
 // Routes
 
+use \Firebase\JWT\JWT;
+
 $app->post('/api/token', function ($request, $response, $args) use ($app){
     $this->logger->info("Rota: '/' route");
     $resp = [];
 
-    //Verificar login aqui
-    $resp["status"] = "OK";
-	$resp["token"] = "Bearer JSKLDNG9FA98Q0238NDNF238.asdfjaosjdf.12312";
-    $resp["matricula"] = "13106428";
-    $resp["tipo_usuario"] = "aluno";
+    $matricula = "13106428";
+    $tipo_usuario = "aluno";
+    $loginStatus = "OK";
+
+    //Se o login ocorreu corretamente
+    $resp["status"] = $loginStatus;
+
+    if($loginStatus == "OK"){
+    	$resp["token"] = generateToken($matricula, $tipo_usuario);
+        $resp["matricula"] = $matricula;
+        $resp["tipo_usuario"] = $tipo_usuario;
+    }
 
     return $response->withJSON($resp);
 });
@@ -26,3 +35,22 @@ $app->post('/api/saveLocalData', function ($request, $response, $args) use ($app
 
     return $response->withJSON($resp);
 });
+
+
+function generateToken($matricula, $tipoUsuario)
+{
+    $now = new DateTime();
+    $future = new DateTime("now +15 minutes");
+
+    $secret = "your_secret_key";
+
+    $payload = [
+        "usr" => $matricula,
+        "typ" => $tipo_usuario,
+        "iat" => $now->getTimeStamp(),
+        "nbf" => $future->getTimeStamp()
+    ];
+
+    $token = JWT::encode($payload, $secret, "HS256");
+    return $token;
+}
