@@ -15,7 +15,9 @@ $app->post('/api/token', function ($request, $response, $args) use ($app){
     $resp["status"] = $loginStatus;
 
     if($loginStatus == "OK"){
-    	$resp["token"] = generateToken($matricula, $tipo_usuario);
+        $token = generateToken($matricula, $tipo_usuario);
+        setcookie("token", $token, time() + (15*60), "/");
+    	$resp["token"] = $token;
         $resp["matricula"] = $matricula;
         $resp["tipo_usuario"] = $tipo_usuario;
     }
@@ -39,7 +41,7 @@ $app->post('/api/saveLocalData', function ($request, $response, $args) use ($app
 
 function generateToken($matricula, $tipoUsuario)
 {
-    $now = new DateTime();
+    $now = new DateTime("now");
     $future = new DateTime("now +15 minutes");
 
     $secret = "your_secret_key";
@@ -47,8 +49,8 @@ function generateToken($matricula, $tipoUsuario)
     $payload = [
         "usr" => $matricula,
         "typ" => $tipo_usuario,
-        "iat" => $now->getTimeStamp(),
-        "nbf" => $future->getTimeStamp()
+        "nbf" => $now->getTimeStamp(),
+        "exp" => $future->getTimeStamp()
     ];
 
     $token = JWT::encode($payload, $secret, "HS256");

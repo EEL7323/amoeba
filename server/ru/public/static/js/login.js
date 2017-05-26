@@ -36,10 +36,21 @@ function login(){
     {
         var saveLocalData = true;
     }
+    var matricula = $("#matricula-salva").html();
+    if (!((matricula)&&(matricula.trim()!='')))
+        var matricula = $("#matricula").val();
+
+    var senha = $("#password").val();
+
+    if ( !((senha)&&(senha.trim()!='')) || !((matricula)&&(matricula.trim()!='')) )
+    {
+        loginError();
+        return;
+    }
 
     var formData = {
-        "matricula": $("#matricula").val(),
-        "senha":     $("#password").val()
+        "matricula": matricula,
+        "senha": senha
     };
 
     //Fazer login aqui
@@ -62,17 +73,16 @@ function login(){
         }
     });
 
-    //Mostrar mensagem de erro, se o login falhar
-    if (!login)
+    //Mostrar mensagem de erro se o login falhar
+    if (loginData["status"] != "OK")
     {
-        $( "#login-container" ).effect( "shake" );
-        $("#erro-login").show();
+        loginError();
         return;
     }
 
     //Senão
     //Salvar token local
-    localStorage.setItem("token", loginData["token"]);
+    localStorage.setItem("token", "Bearer " + loginData["token"]);
     tipo_usuario = loginData["tipo_usuario"];
 
 
@@ -87,20 +97,20 @@ function login(){
                 localStorage.setItem("PROFILE_IMG_SRC", data["imagem"]);
                 localStorage.setItem("PROFILE_NAME", data["nome"]);
                 localStorage.setItem("PROFILE_MATRICULA", data["matricula"]);
-            },
-            headers: {"Authorization": localStorage.getItem('token')}
+            }
         });
     }
 
     //Redirecionar para área de usuário
     if (tipo_usuario=="funcionario")
     {
-        location.assign("/funcionario");
+       window.location.replace("/funcionario");
     }
     else
     {
-        location.assign("/aluno");
+       window.location.replace("/aluno");
     }
+    window.location.replace("/aluno");
 }
 
 function loadProfile() {
@@ -127,4 +137,10 @@ function supportsHTML5Storage() {
     } catch (e) {
         return false;
     }
+}
+
+function loginError()
+{
+    $( "#login-container" ).effect( "shake" );
+    $("#erro-login").show();
 }
