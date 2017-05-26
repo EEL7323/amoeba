@@ -19,13 +19,13 @@
     <div class="container" id="login-container">
         <div class="card hovercard">
             <div class="card-background">
-                <img class="card-bkimg" alt="" src="//lh3.googleusercontent.com/-6V8xOA6M7BA/AAAAAAAAAAI/AAAAAAAAAAA/rzlHcD0KYwo/photo.jpg?sz=120">
+                <img class="card-bkimg" alt="" src="{{imagemUsuario}}">
                 <!-- http://lorempixel.com/850/280/people/9/ -->
             </div>
             <div class="useravatar">
-                <img alt="" src="http://lh3.googleusercontent.com/-6V8xOA6M7BA/AAAAAAAAAAI/AAAAAAAAAAA/rzlHcD0KYwo/photo.jpg?sz=120">
+                <img alt="" src="{{imagemUsuario}}">
             </div>
-            <div class="card-info"> <span class="card-title">Giovanni Cimolin da Silva - 13106428</span>
+            <div class="card-info"> <span class="card-title">{{nome}} - {{matricula}}</span>
 
             </div>
         </div>
@@ -50,7 +50,7 @@
                     <div class="hidden-xs">Perfil</div>
                 </button>
             </div>
-            <div class="btn-group" role="group">
+            <div class="btn-group" role="group" onclick="logout()">
                 <button type="button" id="following" class="btn btn-default" href="#tab3" data-toggle="tab"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>
                     <div class="hidden-xs">Logout</div>
                 </button>
@@ -71,14 +71,18 @@
         </div>
         </div>
     </div><!-- /container -->
-<script type="text/javascript">
-$(document).ready(function() {
-$(".btn-pref .btn").click(function () {
-    $(".btn-pref .btn").removeClass("btn-primary").addClass("btn-default");
-    // $(".tab").addClass("active"); // instead of this do the below
-    $(this).removeClass("btn-default").addClass("btn-primary");
-});
-});
+
+
+
+    <script src="/static/js/aluno.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        $(".btn-pref .btn").click(function () {
+            $(".btn-pref .btn").removeClass("btn-primary").addClass("btn-default");
+            // $(".tab").addClass("active"); // instead of this do the below
+            $(this).removeClass("btn-default").addClass("btn-primary");
+        });
+    });
 </script>
 </body>
 </html>

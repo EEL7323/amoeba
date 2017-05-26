@@ -1,5 +1,9 @@
 <?php
-// DIC configuration
+
+define('DB_HOST', 'localhost');
+define('DB_USER', 'ru');
+define('DB_PASS', '24572457');
+define('DB_NAME', 'rusysdb');
 
 $container = $app->getContainer();
 
@@ -23,7 +27,7 @@ $container['view'] = function ($container) {
     $view = new \Slim\Views\Twig('../templates', [
         'cache' => false
     ]);
-    
+
     // Instantiate and add Slim specific extension
     $basePath = rtrim(str_ireplace('index.php', '', $container['request']->getUri()->getBasePath()), '/');
     $view->addExtension(new Slim\Views\TwigExtension($container['router'], $basePath));
@@ -31,4 +35,9 @@ $container['view'] = function ($container) {
     return $view;
 };
 
-
+//database
+$container['db'] = function($c){
+    //setup NOTORM
+    $db = new PDO('mysql:host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=utf8', DB_USER, DB_PASS);
+    return $db;
+};

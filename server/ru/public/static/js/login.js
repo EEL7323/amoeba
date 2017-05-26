@@ -104,13 +104,12 @@ function login(){
     //Redirecionar para área de usuário
     if (tipo_usuario=="funcionario")
     {
-       window.location.replace("/funcionario");
+       window.location.href = "/funcionario";
     }
     else
     {
-       window.location.replace("/aluno");
+       window.location.href = "/aluno";
     }
-    window.location.replace("/aluno");
 }
 
 function loadProfile() {
