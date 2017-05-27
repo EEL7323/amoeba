@@ -6,10 +6,14 @@ $app->get('/', function ($request, $response, $args) {
     return $this->view->render($response, 'login.html', []);
 });
 
-$app->get('/aluno', function ($request, $response, $args) {
+$app->get('/aluno', function ($request, $response, $args) use ($app) {
     $this->logger->info("Rota: '/' route");
-    $userData['matricula'] = "13106428";
-    $userData['nome'] = "Giovanni Cimolin da Silva";
+    $decoded = (array) $request->getAttribute("token");
+
+    $data = getUserSimpleData($app, $decoded['usr']);
+
+    $userData['matricula'] = $data['matricula'];
+    $userData['nome'] = $data['nome'];
     $userData['imagemUsuario'] = "/api/userImage/".$userData['matricula'];
 
     return $this->view->render($response, 'aluno.html', $userData);

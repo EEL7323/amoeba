@@ -6,5 +6,5 @@ function eraseCookie(name) {
 function logout() {
 	eraseCookie("token");
     localStorage.setItem("token", "");
-    window.location.href = "/";
+    window.location.replace("/");
 }

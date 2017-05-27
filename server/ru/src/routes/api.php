@@ -30,7 +30,7 @@ $app->post('/api/token', function ($request, $response, $args) use ($app){
 
     //Se o login ocorreu corretamente
     if($resp["status"]  == "OK"){
-        $token = generateToken($dadosUsuario['collegeid'], $dadosUsuario['usertype']);
+        $token = generateToken($dadosUsuario['matricula'], $dadosUsuario['tipo_usuario']);
         setcookie("token", $token, time() + (15*60), "/");
     	$resp["token"] = $token;
         $resp["matricula"] = $dadosUsuario['matricula'];
@@ -52,7 +52,7 @@ $app->post('/api/saveLocalData', function ($request, $response, $args) use ($app
     $post = $request->getParsedBody();
 
     $matricula = $post['matricula'];
-    $data = getSaveLoginData($app, $matricula);
+    $data = getUserSimpleData($app, $matricula);
 
     //Verificar login aqui
     $resp["nome"] = $data['nome'];
@@ -95,7 +95,7 @@ function generateToken($matricula, $tipoUsuario)
 
     $payload = [
         "usr" => $matricula,
-        "typ" => $tipo_usuario,
+        "typ" => $tipoUsuario,
         "nbf" => $now->getTimeStamp(),
         "exp" => $future->getTimeStamp()
     ];
@@ -135,7 +135,7 @@ function loginUsuario($app, $matricula, $senha)
     return $data;
 }
 
-function getSaveLoginData($app, $matricula)
+function getUserSimpleData($app, $matricula)
 {
     $container = $app->getContainer();
     $db = $container['db'];
