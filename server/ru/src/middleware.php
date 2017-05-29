@@ -4,7 +4,7 @@
 // e.g: $app->add(new \Slim\Csrf\Guard);
 
 $app->add(new \Slim\Middleware\JwtAuthentication([
-    "path" => ["/api", "/aluno", "/funcionario"],
+    "path" => ["/api", "/usuario", "/funcionario"],
     "passthrough" => ["/api/token", "/api/userImage/"],
     "secret" => "your_secret_key",
     "secure" => false,

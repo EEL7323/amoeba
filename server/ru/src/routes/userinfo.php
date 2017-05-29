@@ -79,6 +79,20 @@ $app->get('/api/userImage/{id}', function ($request, $response, $args) use ($app
     return $response->withHeader("Content-type",  "image/jpg");
 });
 
+//******************************************************************************
+//******************************************************************************
+//Retorna o cardapio do dia
+//******************************************************************************
+//******************************************************************************
+
+$app->get('/api/getCardapioDia', function ($request, $response, $args) use ($app){
+    $this->logger->info("Rota: '/' route");
+
+    $cardapio = getCardapioDia($app);
+
+    return $cardapio;
+});
+
 
 //******************************************************************************
 //******************************************************************************
@@ -146,7 +160,6 @@ function getUserSimpleData($app, $matricula)
     $stmt->bindparam(":matricula", $matricula);
     $stmt->execute();
 
-
     $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     if (count($users) <= 0)
@@ -177,4 +190,21 @@ function getUserImage($app, $matricula)
     $user = $users[0];
 
     return $user['userImage'];
+}
+
+function getCardapioDia($app)
+{
+    $container = $app->getContainer();
+    $db = $container['db'];
+
+    $sql = "SELECT acompanhamento1,acompanhamento2,principal,complemento,salada,sobremesa FROM cardapio LIMIT 1";
+
+    $stmt = $db->prepare($sql);
+    $stmt->execute();
+
+    $cardapios = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $cardapio = json_encode($cardapios[0]);
+
+    return $cardapios[0];
 }

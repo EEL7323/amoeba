@@ -36,8 +36,15 @@ $container['view'] = function ($container) {
 };
 
 //database
-$container['db'] = function($c){
+$container['db'] = function($container){
     //setup NOTORM
     $db = new PDO('mysql:host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=utf8', DB_USER, DB_PASS);
     return $db;
+};
+
+//Override the default Not Found Handler
+$container['notFoundHandler'] = function ($container) {
+    return function ($request, $response) use ($container) {
+        return $response->withStatus(302)->withHeader('Location', '/');
+    };
 };

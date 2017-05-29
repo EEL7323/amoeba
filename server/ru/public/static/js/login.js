@@ -108,7 +108,7 @@ function login(){
     }
     else
     {
-       window.location.href = "/aluno";
+       window.location.href = "/usuario";
     }
 }
 

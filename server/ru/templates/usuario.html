@@ -5,12 +5,12 @@
     <!-- This file has been downloaded from Bootsnipp.com. Enjoy! -->
     <title>Restaurante universitário</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/static/css/aluno.css" rel="stylesheet">
+    <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/main-page.css" rel="stylesheet">
     <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
 
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
     <br>
@@ -19,24 +19,24 @@
     <div class="container" id="login-container">
         <div class="card hovercard">
             <div class="card-background">
-                <img class="card-bkimg" alt="" src="{{imagemUsuario}}">
+                <img class="card-bkimg" alt="" src="{{userData.imagemUsuario}}">
                 <!-- http://lorempixel.com/850/280/people/9/ -->
             </div>
             <div class="useravatar">
-                <img alt="" src="{{imagemUsuario}}">
+                <img alt="" src="{{userData.imagemUsuario}}">
             </div>
-            <div class="card-info"> <span class="card-title">{{nome}} - {{matricula}}</span>
+            <div class="card-info"> <span class="card-title">{{userData.nome}} - {{userData.matricula}}</span>
 
             </div>
         </div>
         <div class="btn-pref btn-group btn-group-justified btn-group-lg" role="group" aria-label="...">
             <div class="btn-group" role="group">
-                <button type="button" id="stars" class="btn btn-primary" href="#tab1" data-toggle="tab"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>
-                    <div class="hidden-xs">Home</div>
+                <button type="button" id="stars" class="btn btn-primary" href="#tab1" data-toggle="tab"><span class="glyphicon glyphicon-apple  " aria-hidden="true"></span>
+                    <div class="hidden-xs">Cardápio</div>
                 </button>
             </div>
             <div class="btn-group" role="group">
-                <button type="button" id="favorites" class="btn btn-default" href="#tab2" data-toggle="tab"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                <button type="button" id="favorites" class="btn btn-default" href="#tab2" data-toggle="tab"><span class="glyphicon glyphicon-usd" aria-hidden="true"></span>
                     <div class="hidden-xs">Comprar passes</div>
                 </button>
             </div>
@@ -45,13 +45,20 @@
                     <div class="hidden-xs">Histórico</div>
                 </button>
             </div>
+            {% if userData.tipo_usuario == 'funcionario' %}
+                <div class="btn-group" role="group" onclick="goToEmployeePage()">
+                <button type="button" id="following" class="btn btn-default" data-toggle="tab"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+                    <div class="hidden-xs">Página de funcionário</div>
+                </button>
+                </div>
+            {% endif %}
             <div class="btn-group" role="group">
                 <button type="button" id="following" class="btn btn-default" href="#tab3" data-toggle="tab"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>
                     <div class="hidden-xs">Perfil</div>
                 </button>
             </div>
             <div class="btn-group" role="group" onclick="logout()">
-                <button type="button" id="following" class="btn btn-default" data-toggle="tab"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                <button type="button" id="following" class="btn btn-default" data-toggle="tab"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
                     <div class="hidden-xs">Logout</div>
                 </button>
             </div>
@@ -60,7 +67,29 @@
         <div class="well">
         <div class="tab-content">
         <div class="tab-pane fade in active" id="tab1">
-          <h3>This is tab 1</h3>
+            <h3><button type="button" class="btn btn-primary">Usuários no restaurante: <span class="badge" id="userCounter">540</span></button></h3>
+            <hr/>
+            <h3><b>Cardápio:</b></h3>
+            <table class="table table-sm">
+              <thead>
+                <tr>
+                  <th>Acompanhamento 1</th>
+                  <th>Acompanhamento 2</th>
+                  <th>Principal</th>
+                  <th>Complemento</th>
+                  <th>Salada</th>
+                  <th>Sobremesa</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                {% for item in cardapio %}
+                  <td>{{item}}</td>
+                {% endfor %}
+                </tr>
+              </tbody>
+            </table>
+
         </div>
         <div class="tab-pane fade in" id="tab2">
           <h3>This is tab 2</h3>
@@ -74,7 +103,7 @@
 
 
 
-    <script src="/static/js/aluno.js"></script>
+    <script src="/static/js/usuario.js"></script>
     <script type="text/javascript">
     $(document).ready(function() {
         $(".btn-pref .btn").click(function () {
