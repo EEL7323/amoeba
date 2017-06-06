@@ -29,8 +29,6 @@ $app->get('/api/numeroUsuariosNoRestaurante', function ($request, $response, $ar
 
     $resp['numUsuarios'] = (int) 500 + rand(-10,10);
 
-    return $response->withStatus(200)
-            ->withHeader('Content-Type', 'application/json')
-            ->write(json_encode($resp));
+    return $response->withJSON($resp);
 });
 
