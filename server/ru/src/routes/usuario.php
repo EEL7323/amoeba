@@ -24,11 +24,22 @@ $app->get('/usuario', function ($request, $response, $args) use ($app) {
 });
 
 
-$app->get('/api/numeroUsuariosNoRestaurante', function ($request, $response, $args) {
+$app->get('/api/numeroUsuariosNoRestaurante', function ($request, $response, $args) use ($app) {
     $this->logger->info("Rota: '/' route");
 
-    $resp['numUsuarios'] = (int) 500 + rand(-10,10);
+    $container = $app->getContainer();
+    $db = $container['db'];
 
-    return $response->withJSON($resp);
+    $sql = "SELECT valor FROM variables WHERE parametro = 'numeroUsuariosNoRestaurante'";
+
+    $stmt = $db->prepare($sql);
+    $stmt->execute();
+
+    $resp = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $valor = $resp[0];
+
+    $numeroUsuarios['numUsuarios'] = $valor['valor'];
+
+    return $response->withJSON($numeroUsuarios);
 });
 

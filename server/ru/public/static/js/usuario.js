@@ -26,5 +26,5 @@ function updateUserCounter() {
 
 
 $(document).ready(function() {
-    window.setInterval(function(){updateUserCounter();},5000);
+    window.setInterval(function(){updateUserCounter();},2000);
 });
