@@ -17,6 +17,14 @@ $app->get('/usuario', function ($request, $response, $args) use ($app) {
     $userData['imagemUsuario'] = "/api/userImage/".$userData['matricula'];
     $userData['tipo_usuario'] = $decoded['typ'];
 
+    if ($userData['tipo_usuario']=="funcionario" or $userData['tipo_usuario']=="professor") {
+        $userData['precoPasse'] = 2.90;
+    } else if ($userData['tipo_usuario']=="aluno") {
+        $userData['precoPasse'] = 1.50;
+    } else {
+        $userData['precoPasse'] = 6.10;
+    }
+
     $pageData['userData'] = $userData;
     $pageData['cardapio'] = getCardapioDia($app);
 

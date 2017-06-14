@@ -40,17 +40,17 @@
                 </button>
             </div>
             <div class="btn-group" role="group">
-                <button type="button" id="favorites" class="btn btn-default" href="#tab2" data-toggle="tab"><span class="glyphicon glyphicon-tag" aria-hidden="true"></span>
-                    <div class="hidden-xs">Cadastro de carteirinha</div>
+                <button type="button" id="favorites" class="btn btn-default" href="#tab3" data-toggle="tab"><span class="glyphicon glyphicon-tag" aria-hidden="true"></span>
+                    <div class="hidden-xs">Vincular carteirinha</div>
                 </button>
             </div>
             <div class="btn-group" role="group">
-                <button type="button" id="following" class="btn btn-default" href="#tab3" data-toggle="tab"><span class="glyphicon glyphicon-usd" aria-hidden="true"></span>
+                <button type="button" id="following" class="btn btn-default" href="#tab4" data-toggle="tab"><span class="glyphicon glyphicon-usd" aria-hidden="true"></span>
                     <div class="hidden-xs">Adicionar créditos</div>
                 </button>
             </div>
             <div class="btn-group" role="group" onclick="goToUserPage()">
-                <button type="button" id="following" class="btn btn-default" href="#tab3" data-toggle="tab"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                <button type="button" id="following" class="btn btn-default" data-toggle="tab"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>
                     <div class="hidden-xs">Página de usuário</div>
                 </button>
             </div>
@@ -78,7 +78,7 @@
                   <th>Sobremesa</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody>my
                 <tr>
                 {% for item in cardapio %}
                   <td>{{item}}</td>
@@ -88,11 +88,84 @@
             </table>
         </div>
         <div class="tab-pane fade in" id="tab2">
-          <h3>This is tab 2</h3>
+
+        <form class="form-horizontal">
+            <fieldset>
+
+            <!-- Form Name -->
+            <legend><h3>Cadastrar novo usuário</h3></legend>
+
+            <!-- Text input-->
+            <div class="form-group">
+              <label class="col-md-4 control-label" for="cmpny">Matrícula</label>
+              <div class="col-md-4">
+              <input id="cmpny" name="matricula" type="text" placeholder="Matrícula" class="form-control input-md" required="">
+
+              </div>
+            </div>
+
+            <!-- Text input-->
+            <div class="form-group">
+              <label class="col-md-4 control-label" for="fn">Nome</label>
+              <div class="col-md-4">
+              <input id="fn" name="nome" type="text" placeholder="Nome completo" class="form-control input-md" required="">
+
+              </div>
+            </div>
+
+            <!-- Select Basic -->
+            <div class="form-group">
+              <label class="col-md-4 control-label" for="selectbasic">Tipo de usuário</label>
+              <div class="col-md-4">
+                <select name="tipo" class="form-control input-md">
+                  <option>Aluno</option>
+                  <option>Funcionário</option>
+                  <option>Professor</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Text input-->
+            <div class="form-group">
+              <label class="col-md-4 control-label" for="email">Email</label>
+              <div class="col-md-4">
+              <input id="email" name="email" type="text" placeholder="E-mail" class="form-control input-md" required="">
+
+              </div>
+            </div>
+
+            <!-- Text input-->
+            <div class="form-group">
+              <label class="col-md-4 control-label" for="senha">Senha</label>
+              <div class="col-md-4">
+              <input id="senha" name="senha" type="text" placeholder="Senha" class="form-control input-md" required="">
+
+              </div>
+            </div
+
+            <!-- Button -->
+            <div class="form-group">
+              <label class="col-md-4 control-label" for="submit"></label>
+              <div class="col-md-4">
+                <button id="submit" name="submit" class="btn btn-primary">Cadastrar</button>
+              </div>
+            </div>
+
+            </fieldset>
+        </form>
         </div>
+
+
         <div class="tab-pane fade in" id="tab3">
-          <h3>This is tab 3</h3>
+          <h3>Vincular carteirinha</h3>
+
         </div>
+
+        <div class="tab-pane fade in" id="tab3">
+          <h3>Adicionar créditos</h3>
+
+        </div>
+
         </div>
         </div>
     </div><!-- /container -->
