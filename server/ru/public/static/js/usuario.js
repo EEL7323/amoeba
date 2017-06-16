@@ -24,7 +24,31 @@ function updateUserCounter() {
     });
 }
 
+function comprarPassesUsuario() {
+    var formData = {
+        "qtd_passes" : $("#compra-qtd-passes").val()
+    };
+    console.log(formData);
+    $.ajax({
+            url: "/api/addPassesUsuario",
+            type: 'POST',
+            async: false,
+            data: formData,
+            success: function(data) {
+                alert("Créditos adicionados com sucesso!");
+                location.reload();
+            }
+        });
+}
+
 
 $(document).ready(function() {
-    window.setInterval(function(){updateUserCounter();},2000);
+    updateUserCounter();
+    window.setInterval(function(){updateUserCounter();},5000);
+
+    $("#compra-qtd-passes").keyup(function() {
+        var qtd = $("#compra-qtd-passes").val();
+        var total = qtd*precoPasse;
+        $("#compra-preco-total").html(total.toFixed(2));
+    });
 });

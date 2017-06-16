@@ -9,6 +9,7 @@
     <link href="/static/css/main-page.css" rel="stylesheet">
     <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+    <script src="http://malsup.github.com/jquery.form.js"></script>
 
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
@@ -45,7 +46,7 @@
                 </button>
             </div>
             <div class="btn-group" role="group">
-                <button type="button" id="following" class="btn btn-default" href="#tab4" data-toggle="tab"><span class="glyphicon glyphicon-usd" aria-hidden="true"></span>
+                <button type="button" id="following" class="btn btn-default" href="#passes" data-toggle="tab"><span class="glyphicon glyphicon-usd" aria-hidden="true"></span>
                     <div class="hidden-xs">Adicionar créditos</div>
                 </button>
             </div>
@@ -78,7 +79,7 @@
                   <th>Sobremesa</th>
                 </tr>
               </thead>
-              <tbody>my
+              <tbody>
                 <tr>
                 {% for item in cardapio %}
                   <td>{{item}}</td>
@@ -89,7 +90,7 @@
         </div>
         <div class="tab-pane fade in" id="tab2">
 
-        <form class="form-horizontal">
+        <form class="form-horizontal" id="form-cadastro-aluno" action="/api/adduser" method="post">
             <fieldset>
 
             <!-- Form Name -->
@@ -97,7 +98,7 @@
 
             <!-- Text input-->
             <div class="form-group">
-              <label class="col-md-4 control-label" for="cmpny">Matrícula</label>
+              <label class="col-md-4 control-label" for="matricula">Matrícula</label>
               <div class="col-md-4">
               <input id="cmpny" name="matricula" type="text" placeholder="Matrícula" class="form-control input-md" required="">
 
@@ -106,7 +107,7 @@
 
             <!-- Text input-->
             <div class="form-group">
-              <label class="col-md-4 control-label" for="fn">Nome</label>
+              <label class="col-md-4 control-label" for="nome">Nome</label>
               <div class="col-md-4">
               <input id="fn" name="nome" type="text" placeholder="Nome completo" class="form-control input-md" required="">
 
@@ -115,12 +116,12 @@
 
             <!-- Select Basic -->
             <div class="form-group">
-              <label class="col-md-4 control-label" for="selectbasic">Tipo de usuário</label>
+              <label class="col-md-4 control-label" for="tipo">Tipo de usuário</label>
               <div class="col-md-4">
                 <select name="tipo" class="form-control input-md">
-                  <option>Aluno</option>
-                  <option>Funcionário</option>
-                  <option>Professor</option>
+                  <option value="aluno">Aluno</option>
+                  <option value="funcionario">Funcionário</option>
+                  <option value="professor">Professor</option>
                 </select>
               </div>
             </div>
@@ -143,11 +144,23 @@
               </div>
             </div
 
+            <!-- Text input-->
+            <div class="form-group">
+              <label class="col-md-4 control-label" for="imagem">Imagem de usuário</label>
+              <div class="col-md-4">
+                <label class="custom-file">
+                  <input type="file" id="imagem" name="imagem" class="custom-file-input">
+                  <span class="custom-file-control"></span>
+                </label>
+
+              </div>
+            </div
+
             <!-- Button -->
             <div class="form-group">
               <label class="col-md-4 control-label" for="submit"></label>
               <div class="col-md-4">
-                <button id="submit" name="submit" class="btn btn-primary">Cadastrar</button>
+                <button id="submitCadastroUsuario" class="btn btn-primary">Cadastrar</button>
               </div>
             </div>
 
@@ -161,8 +174,52 @@
 
         </div>
 
-        <div class="tab-pane fade in" id="tab3">
-          <h3>Adicionar créditos</h3>
+        <div class="tab-pane fade in" id="passes">
+          <h3>Adicionar créditos para usuários</h3>
+          <div class="alert alert-warning" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <strong>Atenção!</strong> Por esta página você pode apenas adicionar passes para a carteirinha do usuário.
+          </div>
+              <table class="table">
+                  <thead>
+                      <tr>
+                          <th>Produto</th>
+                          <th>Matrícula</th>
+                          <th>Quantidade</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+
+                      <tr>
+                          <td>
+                          <div class="media">
+                              <a class="thumbnail pull-left" href="#"> <img class="media-object" src="http://icons.iconarchive.com/icons/custom-icon-design/flatastic-2/72/product-icon.png" style="width: 72px; height: 72px;"> </a>
+                              <div class="media-body">
+                                  <h4 class="media-heading"><a href="#">&nbsp Passe comum</a></h4>
+                                  <span>&nbsp Status: </span><span class="text-success"><strong>  Disponível para compra</strong></span>
+                              </div>
+                          </div>
+                          </td>
+                          <td class="col-sm-1 col-md-2" style="text-align: center">
+                          <input type="qty" class="form-control" size="20" id="adicionar-credito-matricula" value="">
+                          </td>
+                          <td class="col-sm-1 col-md-2" style="text-align: center">
+                          <input type="qty" class="form-control" size="5" id="adicionar-credito-qtd-passes" value="">
+                          </td>
+                      </tr>
+                      <tr>
+                          <td>   </td>
+                          <td>   </td>
+
+                          <td>
+                          <button type="button" id="submitAddPasses" class="btn btn-success">
+                              Adicionar passes <span class="glyphicon glyphicon-plus"></span>
+                          </button></td>
+                      </tr>
+                  </tbody>
+              </table>
 
         </div>
 

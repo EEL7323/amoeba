@@ -11,6 +11,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
 
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+      var precoPasse = '{{ userData.precoPasse }}';
+    </script>
 </head>
 <body>
     <br>
@@ -107,7 +110,6 @@
                         <th>Quantidade</th>
                         <th class="text-center">Preço</th>
                         <th class="text-center">Total</th>
-                        <th> </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -121,10 +123,10 @@
                             </div>
                         </div></td>
                         <td class="col-sm-1 col-md-1" style="text-align: center">
-                        <input type="qty" class="form-control" id="qtd-passes" value="1">
+                        <input type="qty" class="form-control" id="compra-qtd-passes" value="1">
                         </td>
-                        <td class="col-sm-1 col-md-1 text-center"><strong><span id="preco-passe">R$ {{userData.precoPasse|number_format(2, '.')}}</span></strong></td>
-                        <td class="col-sm-1 col-md-1 text-center"><strong><span id="preco-total">R$ {{userData.precoPasse|number_format(2, '.')}}</span></strong></td>
+                        <td class="col-sm-1 col-md-1 text-center"><strong>R$ {{userData.precoPasse|number_format(2, '.')}}</strong></td>
+                        <td class="col-sm-1 col-md-1 text-center"><strong>R$ <span id="compra-preco-total">{{userData.precoPasse|number_format(2, '.')}}</span></strong></td>
                     </tr>
                     <tr>
                         <td>   </td>
@@ -132,8 +134,8 @@
                         <td>   </td>
 
                         <td>
-                        <button type="button" class="btn btn-success">
-                            Checkout <span class="glyphicon glyphicon-play"></span>
+                        <button type="button" class="btn btn-success" onclick="comprarPassesUsuario()">
+                            Comprar passes <span class="glyphicon glyphicon-play"></span>
                         </button></td>
                     </tr>
                 </tbody>
@@ -158,31 +160,31 @@
                       </tr>
                     </thead>
                     <tbody>
+                    {% for item in userData.historico %}
                       <tr>
-                        <td>1</td>
-                        <td>16/06/2017 15:45</td>
-                        <td>Funcionário</td>
-                        <td>10</td>
-                        <td>R$ 2.90</td>
-                        <td><span class="label label-info">Aguardando carteirinha</span></td>
+                        <td>{{item.idCredit}}</td>
+                        <td>{{item.timestamp}}</td>
+                        <td>Crédito para carteirinha de <b>{{userData.tipo_usuario}}</b></td>
+                        <td>{{item.valor}}</td>
+                        <td>R$ {{ (item.valor*userData.precoPasse)|number_format(2, '.')}}</td>
+                        <td>
+                        {% if item.processed == "0" %}
+                            <span class="label label-info">Aguardando carteirinha</span></td>
+                        {% else %}
+                            <span class="label label-success">Concluído</span></td>
+                        {% endif %}
+
                       </tr>
-                      <tr>
-                        <td>1</td>
-                        <td>16/05/2017 15:45</td>
-                        <td>Funcionário</td>
-                        <td>10</td>
-                        <td>R$ 2.90</td>
-                        <td><span class="label label-primary">Completado</span></td>
-                      </tr>
+                      {% endfor %}
                     </tbody>
                   </table>
                 </div>
         </div>
 
         <div class="tab-pane fade in" id="tab4">
-        <h3>Perfil</h3>
-
+            <img class="img-delayed" align="middle" id="nothing-here" src="/static/images/nothing.gif">
         </div>
+
 
         </div>
         </div>

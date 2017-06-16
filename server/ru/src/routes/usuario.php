@@ -25,6 +25,8 @@ $app->get('/usuario', function ($request, $response, $args) use ($app) {
         $userData['precoPasse'] = 6.10;
     }
 
+    $userData['historico'] = getHistoricoUsuario($app, $userData['matricula']);
+
     $pageData['userData'] = $userData;
     $pageData['cardapio'] = getCardapioDia($app);
 
@@ -51,3 +53,43 @@ $app->get('/api/numeroUsuariosNoRestaurante', function ($request, $response, $ar
     return $response->withJSON($numeroUsuarios);
 });
 
+$app->post('/api/addPassesUsuario', function ($request, $response, $args) use ($app){
+    $this->logger->info("Rota: '/' route");
+    $resp = [];
+    $container = $app->getContainer();
+    $db = $container['db'];
+    $decoded = (array) $request->getAttribute("token");
+
+    $post = $request->getParsedBody();
+
+    $matricula = $decoded['usr'];
+    $quantidade = $post['qtd_passes'];
+
+    $sql = "INSERT INTO `credits` (`Timestamp`, `valor`, `processed`, `collegeid`)
+            VALUES (NOW(), :quantidade, '0', :matricula);";
+
+    $stmt = $db->prepare($sql);
+    $stmt->bindparam(":matricula", $matricula);
+    $stmt->bindparam(":quantidade", $quantidade);
+    $stmt->execute();
+
+    $resṕ['status'] = "OK";
+
+    return $response->withJSON($resp);
+});
+
+function getHistoricoUsuario($app, $matricula)
+{
+    $container = $app->getContainer();
+    $db = $container['db'];
+
+    $sql = "SELECT * FROM credits WHERE collegeid = :matricula ORDER BY Timestamp DESC";
+
+    $stmt = $db->prepare($sql);
+    $stmt->bindparam(":matricula", $matricula);
+    $stmt->execute();
+
+    $historico = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    return $historico;
+}
