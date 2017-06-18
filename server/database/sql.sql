@@ -86,7 +86,7 @@ CREATE TABLE `credits` (
   `processed` varchar(45) DEFAULT NULL,
   `collegeid` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`idCredit`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -95,8 +95,35 @@ CREATE TABLE `credits` (
 
 LOCK TABLES `credits` WRITE;
 /*!40000 ALTER TABLE `credits` DISABLE KEYS */;
-INSERT INTO `credits` VALUES (1,'2017-05-16 18:20:10','Funcionario','50	','1','13106428'),(2,'2017-06-16 15:45:26','','20','1','13106428'),(3,'2017-06-16 19:37:47',NULL,'1','0','13106428');
+INSERT INTO `credits` VALUES (1,'2017-05-16 18:20:10','carteirinha','50	','1','13106428'),(2,'2017-06-16 15:45:26','carteirinha','20','1','13106428'),(3,'2017-06-16 19:37:47','celular','1','1','13106428'),(4,'2017-06-18 16:45:16','carteirinha','50','1','13106428');
 /*!40000 ALTER TABLE `credits` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `devices`
+--
+
+DROP TABLE IF EXISTS `devices`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `devices` (
+  `iddevices` int(11) NOT NULL AUTO_INCREMENT,
+  `tipo` varchar(45) DEFAULT NULL,
+  `identifier` varchar(45) DEFAULT NULL,
+  `collegeid` varchar(45) DEFAULT NULL,
+  `added` datetime DEFAULT NULL,
+  PRIMARY KEY (`iddevices`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `devices`
+--
+
+LOCK TABLES `devices` WRITE;
+/*!40000 ALTER TABLE `devices` DISABLE KEYS */;
+INSERT INTO `devices` VALUES (1,'carteirinha','SAA6A4SD54A8SD1','13106428','2017-06-18 16:48:53'),(2,'carteirinha','SAA6A4SD54A8SD2',NULL,'2017-06-18 17:34:17');
+/*!40000 ALTER TABLE `devices` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -165,4 +192,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-06-17 14:08:20
+-- Dump completed on 2017-06-18 18:00:09

@@ -65,8 +65,8 @@ $app->post('/api/addPassesUsuario', function ($request, $response, $args) use ($
     $matricula = $decoded['usr'];
     $quantidade = $post['qtd_passes'];
 
-    $sql = "INSERT INTO `credits` (`Timestamp`, `valor`, `processed`, `collegeid`)
-            VALUES (NOW(), :quantidade, '0', :matricula);";
+    $sql = "INSERT INTO `credits` (`Timestamp`, `valor`, `processed`, `collegeid`, `type`)
+            VALUES (NOW(), :quantidade, '0', :matricula, 'Carteirinha');";
 
     $stmt = $db->prepare($sql);
     $stmt->bindparam(":matricula", $matricula);

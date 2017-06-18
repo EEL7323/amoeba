@@ -61,3 +61,28 @@ $app->post('/api/adduser', function ($request, $response, $args) use ($app) {
 
     return $response->withJSON($resp);
 });
+
+$app->post('/api/addPassesFuncionario', function ($request, $response, $args) use ($app){
+    $this->logger->info("Rota: '/' route");
+    $resp = [];
+    $container = $app->getContainer();
+    $db = $container['db'];
+    $decoded = (array) $request->getAttribute("token");
+
+    $post = $request->getParsedBody();
+
+    $matricula = $post['matricula'];
+    $quantidade = $post['qtd_passes'];
+
+    $sql = "INSERT INTO `credits` (`Timestamp`, `valor`, `processed`, `collegeid`, `type`)
+            VALUES (NOW(), :quantidade, '0', :matricula, 'Carteirinha');";
+
+    $stmt = $db->prepare($sql);
+    $stmt->bindparam(":matricula", $matricula);
+    $stmt->bindparam(":quantidade", $quantidade);
+    $stmt->execute();
+
+    $resṕ['status'] = "OK";
+
+    return $response->withJSON($resp);
+});

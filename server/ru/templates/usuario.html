@@ -164,7 +164,7 @@
                       <tr>
                         <td>{{item.idCredit}}</td>
                         <td>{{item.timestamp}}</td>
-                        <td>Crédito para carteirinha de <b>{{userData.tipo_usuario}}</b></td>
+                        <td>Crédito para <b>{{item.type}}</b></td>
                         <td>{{item.valor}}</td>
                         <td>R$ {{ (item.valor*userData.precoPasse)|number_format(2, '.')}}</td>
                         <td>

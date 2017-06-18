@@ -12,11 +12,6 @@ $app->get('/api/setNumeroUsuariosRestaurante/{num}', function ($request, $respon
     $this->logger->info("Rota: '/' route");
     $decoded = (array) $request->getAttribute("token");
 
-    if ($decoded['hw_code'] != 'senha_magica_da_placa')
-    {
-        return $response->withStatus(403);
-    }
-
     if(!is_int($args['num']))
     {
         $resp['status'] = "ERRO";
@@ -33,6 +28,92 @@ $app->get('/api/setNumeroUsuariosRestaurante/{num}', function ($request, $respon
 
         $resp['status'] = "OK";
     }
+
+    return $response->withJSON($resp);
+});
+
+
+$app->get('/api/getCreditosCarteirinha/{identifier}', function ($request, $response, $args) use ($app){
+    $this->logger->info("Rota: '/' route");
+    $decoded = (array) $request->getAttribute("token");
+
+    $container = $app->getContainer();
+    $db = $container['db'];
+    $exite = 0;
+
+    $sql = "SELECT * FROM devices WHERE identifier = :identifier";
+
+    $stmt = $db->prepare($sql);
+    $stmt->bindparam(":identifier", $args['identifier']);
+    $stmt->execute();
+
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    if (count($rows)==1){
+        $existe=1;
+    } else {
+        $sql = "INSERT INTO devices (tipo, identifier, added) VALUES ('carteirinha', :identifier, NOW());";
+
+        $stmt = $db->prepare($sql);
+        $stmt->bindparam(":identifier", $args['identifier']);
+        $stmt->execute();
+
+        $resp['status'] = "CARTEIRINHA_NOVA";
+    }
+
+    if ($existe==1)
+    {
+        $sql = "SELECT
+                    *
+                FROM
+                    credits
+                        INNER JOIN
+                    devices ON credits.collegeid = devices.collegeid
+                WHERE
+                    identifier = :identifier
+                        AND processed = 0;
+                ";
+
+        $stmt = $db->prepare($sql);
+        $stmt->bindparam(":identifier", $args['identifier']);
+        $stmt->execute();
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $total_credits = 0;
+
+        foreach ($rows as &$row) {
+            $total_credits = $total_credits + $row['valor'];
+        }
+        $resp['status'] = "RECARGA_PENDENTE";
+        $resp['credits'] = $total_credits;
+    }
+
+    return $response->withJSON($resp);
+});
+
+$app->get('/api/confirmaRecarga/{identifier}', function ($request, $response, $args) use ($app){
+    $this->logger->info("Rota: '/' route");
+    $decoded = (array) $request->getAttribute("token");
+
+    $container = $app->getContainer();
+    $db = $container['db'];
+
+    $sql = "UPDATE
+                credits
+            INNER JOIN devices ON
+                credits.collegeid = devices.collegeid
+            SET
+                processed = '1'
+            WHERE
+                identifier = :identifier";
+
+    $stmt = $db->prepare($sql);
+    $stmt->bindparam(":identifier", $args['identifier']);
+    $stmt->execute();
+
+    $resp['status'] = 'OK';
+
+    echo $args['identifier'];
 
     return $response->withJSON($resp);
 });
