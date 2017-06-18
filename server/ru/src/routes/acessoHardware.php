@@ -12,7 +12,9 @@ $app->get('/api/setNumeroUsuariosRestaurante/{num}', function ($request, $respon
     $this->logger->info("Rota: '/' route");
     $decoded = (array) $request->getAttribute("token");
 
-    if(!is_int($args['num']))
+    $num = intval($args['num']);
+
+    if(!is_int($num))
     {
         $resp['status'] = "ERRO";
         $resp['reason'] = "Not a valid number";
