@@ -115,7 +115,5 @@ $app->get('/api/confirmaRecarga/{identifier}', function ($request, $response, $a
 
     $resp['status'] = 'OK';
 
-    echo $args['identifier'];
-
     return $response->withJSON($resp);
 });

@@ -78,6 +78,32 @@ $app->post('/api/addPassesUsuario', function ($request, $response, $args) use ($
     return $response->withJSON($resp);
 });
 
+$app->get('/api/addPassesUsuarioSmartphone/{passes}', function ($request, $response, $args) use ($app){
+    $this->logger->info("Rota: '/' route");
+
+    $container = $app->getContainer();
+    $db = $container['db'];
+    $decoded = (array) $request->getAttribute("token");
+
+    $post = $request->getParsedBody();
+
+    $matricula = $decoded['usr'];
+    $quantidade = intval($args['passes']);
+
+    $sql = "INSERT INTO `credits` (`Timestamp`, `valor`, `processed`, `collegeid`, `type`)
+            VALUES (NOW(), :quantidade, '1', :matricula, 'celular');";
+
+    $stmt = $db->prepare($sql);
+    $stmt->bindparam(":matricula", $matricula);
+    $stmt->bindparam(":quantidade", $quantidade);
+    $stmt->execute();
+
+    $resp['status'] = "OK";
+    $resp['authorized_credits'] = $quantidade;
+
+    return $response->withJSON($resp);
+});
+
 function getHistoricoUsuario($app, $matricula)
 {
     $container = $app->getContainer();
