@@ -17,7 +17,8 @@ $app->post('/api/token', function ($request, $response, $args) use ($app){
     $matricula = $post['matricula'];
     $senha = $post['senha'];
     $dispositivo = $post['dispositivo'];
-    $expira = $post['expira'];
+    $expira = "NAO"; // $post['expira'];
+
 
     $dadosUsuario = loginUsuario($app, $matricula, $senha);
 

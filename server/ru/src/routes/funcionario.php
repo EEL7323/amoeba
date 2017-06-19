@@ -16,6 +16,8 @@ $app->get('/funcionario', function ($request, $response, $args) use ($app) {
     $userData['imagemUsuario'] = "/api/userImage/".$userData['matricula'];
     $userData['tipo_usuario'] = $decoded['typ'];
 
+    $pageData['carteirinhasSemVinculo'] = getCarteirinhasSemVinculo($app);
+
     $pageData['userData'] = $userData;
     $pageData['cardapio'] = getCardapioDia($app);
 
@@ -69,6 +71,11 @@ $app->post('/api/addPassesFuncionario', function ($request, $response, $args) us
     $db = $container['db'];
     $decoded = (array) $request->getAttribute("token");
 
+    if ($decoded['typ'] !='funcionario')
+    {
+        return $response->withStatus(302)->withHeader('Location', '/usuario');
+    }
+
     $post = $request->getParsedBody();
 
     $matricula = $post['matricula'];
@@ -86,3 +93,48 @@ $app->post('/api/addPassesFuncionario', function ($request, $response, $args) us
 
     return $response->withJSON($resp);
 });
+
+$app->post('/api/vincularCarteirinha', function ($request, $response, $args) use ($app){
+    $this->logger->info("Rota: '/' route");
+    $resp = [];
+    $container = $app->getContainer();
+    $db = $container['db'];
+    $decoded = (array) $request->getAttribute("token");
+
+    if ($decoded['typ'] !='funcionario')
+    {
+        return $response->withStatus(302)->withHeader('Location', '/usuario');
+    }
+
+    $post = $request->getParsedBody();
+
+    $matricula = $post['matricula'];
+    $identifier = $post['identifier'];
+
+    $sql = "UPDATE devices SET collegeid = :matricula WHERE identifier = :identifier";
+
+    $stmt = $db->prepare($sql);
+    $stmt->bindparam(":matricula", $matricula);
+    $stmt->bindparam(":identifier", $identifier);
+    $stmt->execute();
+
+    $resṕ['status'] = "OK";
+
+    return $response->withJSON($resp);
+});
+
+
+function getCarteirinhasSemVinculo($app)
+{
+    $container = $app->getContainer();
+    $db = $container['db'];
+
+    $sql = "SELECT * FROM devices WHERE collegeid IS NULL;";
+
+    $stmt = $db->prepare($sql);
+    $stmt->execute();
+
+    $carteirinhasSemVinculo = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    return $carteirinhasSemVinculo;
+}

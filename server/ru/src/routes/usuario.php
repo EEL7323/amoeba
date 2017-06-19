@@ -104,6 +104,25 @@ $app->get('/api/addPassesUsuarioSmartphone/{passes}', function ($request, $respo
     return $response->withJSON($resp);
 });
 
+$app->get('/api/getHistoricoUsuarioSmartphone', function ($request, $response, $args) use ($app){
+    $this->logger->info("Rota: '/' route");
+
+    $container = $app->getContainer();
+    $db = $container['db'];
+    $decoded = (array) $request->getAttribute("token");
+
+    $sql = "SELECT * FROM credits WHERE collegeid = :matricula ORDER BY Timestamp DESC";
+
+    $stmt = $db->prepare($sql);
+    $stmt->bindparam(":matricula", $decoded['usr']);
+    $stmt->execute();
+
+    $historico = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    return $response->withJSON($historico);
+});
+
+
 function getHistoricoUsuario($app, $matricula)
 {
     $container = $app->getContainer();

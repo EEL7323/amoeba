@@ -5,9 +5,10 @@ $(document).ready(function() {
         alert("Usuário adicionado!");
     });
 
-    $('#submitAddPasses').click(function() {
-    	addCredits();
-    });
+    $( ".botaoVincularCarteirinha" ).click(function() {
+    	var idLinha = $(this).parents("tr").children().first().html();
+	  	vincularCarteirinha(idLinha);
+	});
 
 });
 
@@ -15,8 +16,21 @@ function goToUserPage() {
     window.location.href = "/usuario";
 }
 
-function addCredits() {
-    alert("Créditos adicionados com sucesso!");
+function vincularCarteirinha(idLinha) {
+	var formData = {
+		"matricula" : $('#matricula_vincular_'+idLinha).val(),
+		"identifier": $('#indentificador_'+idLinha).html()
+	}
+	$.ajax({
+        url: "/api/vincularCarteirinha",
+        type: 'POST',
+        async: false,
+        data: formData,
+        success: function(data) {
+            alert("Carteirinha vinculada com sucesso!");
+            location.reload();
+        }
+    });
 }
 
 function comprarPassesFuncionario() {
@@ -24,7 +38,6 @@ function comprarPassesFuncionario() {
         "qtd_passes" : $("#adicionar-credito-qtd-passes").val(),
         "matricula" : $("#adicionar-credito-matricula").val()
     };
-    console.log(formData);
     $.ajax({
             url: "/api/addPassesFuncionario",
             type: 'POST',
