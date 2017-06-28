@@ -16,6 +16,9 @@ $app->post('/api/token', function ($request, $response, $args) use ($app){
 
     $matricula = $post['matricula'];
     $senha = $post['senha'];
+    $dispositivo = $post['dispositivo'];
+    $expira = "NAO"; // $post['expira'];
+
 
     $dadosUsuario = loginUsuario($app, $matricula, $senha);
 
@@ -30,8 +33,16 @@ $app->post('/api/token', function ($request, $response, $args) use ($app){
 
     //Se o login ocorreu corretamente
     if($resp["status"]  == "OK"){
-        $token = generateToken($dadosUsuario['matricula'], $dadosUsuario['tipo_usuario']);
-        setcookie("token", $token, time() + (15*60), "/");
+        if ($expira=="NAO")
+        {
+            $token = generateToken($dadosUsuario['matricula'], $dadosUsuario['tipo_usuario'], False);
+            setcookie("token", $token, time() + (365*24*60*60), "/");
+        }
+        else
+        {
+            $token = generateToken($dadosUsuario['matricula'], $dadosUsuario['tipo_usuario']);
+            setcookie("token", $token, time() + (120*60), "/");
+        }
     	$resp["token"] = $token;
         $resp["matricula"] = $dadosUsuario['matricula'];
         $resp["tipo_usuario"] = $dadosUsuario['tipo_usuario'];
@@ -57,7 +68,7 @@ $app->post('/api/saveLocalData', function ($request, $response, $args) use ($app
     //Verificar login aqui
     $resp["nome"] = $data['nome'];
 	$resp["matricula"] = $data['matricula'];
-	$resp["imagem"] = "//ru.local/api/userImage/".$matricula;
+	$resp["imagem"] = "api/userImage/".$matricula;
 
 
     return $response->withJSON($resp);
@@ -100,10 +111,16 @@ $app->get('/api/getCardapioDia', function ($request, $response, $args) use ($app
 //******************************************************************************
 //******************************************************************************
 
-function generateToken($matricula, $tipoUsuario)
+function generateToken($matricula, $tipoUsuario, $expira = True)
 {
     $now = new DateTime("now");
-    $future = new DateTime("now +15 minutes");
+    if ($expira == True)
+    {
+        $future = new DateTime("now +2 hours");
+    } else
+    {
+        $future = new DateTime("now +1 year");
+    }
 
     $secret = "your_secret_key";
 

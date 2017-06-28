@@ -11,6 +11,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
 
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+      var precoPasse = '{{ userData.precoPasse }}';
+    </script>
 </head>
 <body>
     <br>
@@ -53,7 +56,7 @@
                 </div>
             {% endif %}
             <div class="btn-group" role="group">
-                <button type="button" id="following" class="btn btn-default" href="#tab3" data-toggle="tab"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                <button type="button" id="following" class="btn btn-default" href="#tab4" data-toggle="tab"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>
                     <div class="hidden-xs">Perfil</div>
                 </button>
             </div>
@@ -67,7 +70,7 @@
         <div class="well">
         <div class="tab-content">
         <div class="tab-pane fade in active" id="tab1">
-            <h3><button type="button" class="btn btn-primary">Usuários no restaurante: <span class="badge" id="userCounter">540</span></button></h3>
+            <h3><button type="button" class="btn btn-primary">Usuários no restaurante: <span class="badge" id="userCounter"></span></button></h3>
             <hr/>
             <h3><b>Cardápio:</b></h3>
             <table class="table table-sm">
@@ -91,12 +94,98 @@
             </table>
 
         </div>
+
         <div class="tab-pane fade in" id="tab2">
-          <h3>This is tab 2</h3>
+        <h3>Comprar passes</h3>
+        <div class="alert alert-warning" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <strong>Atenção!</strong> Por esta página você pode apenas comprar passes para a carteirinha.
         </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Produto</th>
+                        <th>Quantidade</th>
+                        <th class="text-center">Preço</th>
+                        <th class="text-center">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                        <div class="media">
+                            <a class="thumbnail pull-left" href="#"> <img class="media-object" src="http://icons.iconarchive.com/icons/custom-icon-design/flatastic-2/72/product-icon.png" style="width: 72px; height: 72px;"> </a>
+                            <div class="media-body">
+                                <h4 class="media-heading"><a href="#">&nbsp Passe de {{userData.tipo_usuario}}</a></h4>
+                                <span>&nbsp Status: </span><span class="text-success"><strong>  Disponível para compra</strong></span>
+                            </div>
+                        </div></td>
+                        <td class="col-sm-1 col-md-1" style="text-align: center">
+                        <input type="qty" class="form-control" id="compra-qtd-passes" value="1">
+                        </td>
+                        <td class="col-sm-1 col-md-1 text-center"><strong>R$ {{userData.precoPasse|number_format(2, '.')}}</strong></td>
+                        <td class="col-sm-1 col-md-1 text-center"><strong>R$ <span id="compra-preco-total">{{userData.precoPasse|number_format(2, '.')}}</span></strong></td>
+                    </tr>
+                    <tr>
+                        <td>   </td>
+                        <td>   </td>
+                        <td>   </td>
+
+                        <td>
+                        <button type="button" class="btn btn-success" onclick="comprarPassesUsuario()">
+                            Comprar passes <span class="glyphicon glyphicon-play"></span>
+                        </button></td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+
         <div class="tab-pane fade in" id="tab3">
-          <h3>This is tab 3</h3>
+          <h3>Histórico de compras</h3>
+          <br>
+                <div class="table-responsive">
+                  <table class="table ">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Data</th>
+                        <th>Tipo de usuário</th>
+                        <th>Passes</th>
+                        <th>Total</th>
+                        <th>Estado</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in userData.historico %}
+                      <tr>
+                        <td>{{item.idCredit}}</td>
+                        <td>{{item.timestamp}}</td>
+                        <td>Crédito para <b>{{item.type}}</b></td>
+                        <td>{{item.valor}}</td>
+                        <td>R$ {{ (item.valor*userData.precoPasse)|number_format(2, '.')}}</td>
+                        <td>
+                        {% if item.processed == "0" %}
+                            <span class="label label-info">Aguardando carteirinha</span></td>
+                        {% else %}
+                            <span class="label label-success">Concluído</span></td>
+                        {% endif %}
+
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
         </div>
+
+        <div class="tab-pane fade in" id="tab4">
+            <img class="img-delayed" align="middle" id="nothing-here" src="/static/images/nothing.gif">
+        </div>
+
+
         </div>
         </div>
     </div><!-- /container -->

@@ -63,7 +63,7 @@ function login(){
         async: false,
         data: formData,
         error : function(err) {
-            console.log('Errod de login!', err)
+            console.log('Erro de login!', err)
         },
         success: function(data) {
             if (data["status"]=="OK"){

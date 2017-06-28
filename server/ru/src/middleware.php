@@ -5,7 +5,7 @@
 
 $app->add(new \Slim\Middleware\JwtAuthentication([
     "path" => ["/api", "/usuario", "/funcionario"],
-    "passthrough" => ["/api/token", "/api/userImage/"],
+    "passthrough" => ["/api/token", "/api/userImage/", "/api/setNumeroUsuariosRestaurante/", "/api/getCreditosCarteirinha/", "/api/confirmaRecarga/"],
     "secret" => "your_secret_key",
     "secure" => false,
     "cookie" => "token",

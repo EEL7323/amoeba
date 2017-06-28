@@ -28,6 +28,7 @@ require __DIR__ . '/../src/middleware.php';
 require __DIR__ . '/../src/routes/userinfo.php';
 require __DIR__ . '/../src/routes/funcionario.php';
 require __DIR__ . '/../src/routes/usuario.php';
+require __DIR__ . '/../src/routes/acessoHardware.php';
 
 // Run app
 $app->run();

@@ -17,6 +17,16 @@ $app->get('/usuario', function ($request, $response, $args) use ($app) {
     $userData['imagemUsuario'] = "/api/userImage/".$userData['matricula'];
     $userData['tipo_usuario'] = $decoded['typ'];
 
+    if ($userData['tipo_usuario']=="funcionario" or $userData['tipo_usuario']=="professor") {
+        $userData['precoPasse'] = 2.90;
+    } else if ($userData['tipo_usuario']=="aluno") {
+        $userData['precoPasse'] = 1.50;
+    } else {
+        $userData['precoPasse'] = 6.10;
+    }
+
+    $userData['historico'] = getHistoricoUsuario($app, $userData['matricula']);
+
     $pageData['userData'] = $userData;
     $pageData['cardapio'] = getCardapioDia($app);
 
@@ -24,13 +34,107 @@ $app->get('/usuario', function ($request, $response, $args) use ($app) {
 });
 
 
-$app->get('/api/numeroUsuariosNoRestaurante', function ($request, $response, $args) {
+$app->get('/api/numeroUsuariosNoRestaurante', function ($request, $response, $args) use ($app) {
     $this->logger->info("Rota: '/' route");
 
-    $resp['numUsuarios'] = (int) 500 + rand(-10,10);
+    $container = $app->getContainer();
+    $db = $container['db'];
 
-    return $response->withStatus(200)
-            ->withHeader('Content-Type', 'application/json')
-            ->write(json_encode($resp));
+    $sql = "SELECT valor FROM variables WHERE parametro = 'numeroUsuariosNoRestaurante'";
+
+    $stmt = $db->prepare($sql);
+    $stmt->execute();
+
+    $resp = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $valor = $resp[0];
+
+    $numeroUsuarios['numUsuarios'] = $valor['valor'];
+
+    return $response->withJSON($numeroUsuarios);
 });
 
+$app->post('/api/addPassesUsuario', function ($request, $response, $args) use ($app){
+    $this->logger->info("Rota: '/' route");
+    $resp = [];
+    $container = $app->getContainer();
+    $db = $container['db'];
+    $decoded = (array) $request->getAttribute("token");
+
+    $post = $request->getParsedBody();
+
+    $matricula = $decoded['usr'];
+    $quantidade = $post['qtd_passes'];
+
+    $sql = "INSERT INTO `credits` (`Timestamp`, `valor`, `processed`, `collegeid`, `type`)
+            VALUES (NOW(), :quantidade, '0', :matricula, 'Carteirinha');";
+
+    $stmt = $db->prepare($sql);
+    $stmt->bindparam(":matricula", $matricula);
+    $stmt->bindparam(":quantidade", $quantidade);
+    $stmt->execute();
+
+    $resṕ['status'] = "OK";
+
+    return $response->withJSON($resp);
+});
+
+$app->get('/api/addPassesUsuarioSmartphone/{passes}', function ($request, $response, $args) use ($app){
+    $this->logger->info("Rota: '/' route");
+
+    $container = $app->getContainer();
+    $db = $container['db'];
+    $decoded = (array) $request->getAttribute("token");
+
+    $post = $request->getParsedBody();
+
+    $matricula = $decoded['usr'];
+    $quantidade = intval($args['passes']);
+
+    $sql = "INSERT INTO `credits` (`Timestamp`, `valor`, `processed`, `collegeid`, `type`)
+            VALUES (NOW(), :quantidade, '1', :matricula, 'celular');";
+
+    $stmt = $db->prepare($sql);
+    $stmt->bindparam(":matricula", $matricula);
+    $stmt->bindparam(":quantidade", $quantidade);
+    $stmt->execute();
+
+    $resp['status'] = "OK";
+    $resp['authorized_credits'] = $quantidade;
+
+    return $response->withJSON($resp);
+});
+
+$app->get('/api/getHistoricoUsuarioSmartphone', function ($request, $response, $args) use ($app){
+    $this->logger->info("Rota: '/' route");
+
+    $container = $app->getContainer();
+    $db = $container['db'];
+    $decoded = (array) $request->getAttribute("token");
+
+    $sql = "SELECT * FROM credits WHERE collegeid = :matricula ORDER BY Timestamp DESC";
+
+    $stmt = $db->prepare($sql);
+    $stmt->bindparam(":matricula", $decoded['usr']);
+    $stmt->execute();
+
+    $historico = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    return $response->withJSON($historico);
+});
+
+
+function getHistoricoUsuario($app, $matricula)
+{
+    $container = $app->getContainer();
+    $db = $container['db'];
+
+    $sql = "SELECT * FROM credits WHERE collegeid = :matricula ORDER BY Timestamp DESC";
+
+    $stmt = $db->prepare($sql);
+    $stmt->bindparam(":matricula", $matricula);
+    $stmt->execute();
+
+    $historico = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    return $historico;
+}
