@@ -1,0 +1,126 @@
+    public void onButtonClick(View v){
+        try {
+            URL url = new URL("http://rueba.site/api/token");
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setDoOutput(true);
+            urlConnection.setChunkedStreamingMode(0);
+            OutputStream out = new BufferedOutputStream(urlConnection.getOutputStream());
+            writeStream(out);
+            InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+            readStream(in);
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            urlConnection.disconnect();
+        }
+
+            if(v.getId() == R.id.login){
+            Intent i = new Intent(MainActivity.this, home.class);
+            startActivity(i);
+        }
+    }
+
+
+
+            Context context = getApplicationContext();
+            CharSequence text = "Teste";
+            int duration = Toast.LENGTH_SHORT;
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+
+
+        try {
+            URL url = new URL("http://rueba.site/api/token");
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setReadTimeout(10000);
+            urlConnection.setConnectTimeout(15000);
+            urlConnection.setDoInput(true);
+            urlConnection.setDoOutput(true);
+            urlConnection.setRequestMethod("POST");
+            urlConnection.setRequestProperty("Content-Type", "text/plain");
+            urlConnection.setChunkedStreamingMode(0);
+
+            Uri.Builder builder = new Uri.Builder()
+                    .appendQueryParameter("matricula", "12200957")
+                    .appendQueryParameter("senha", "123456");
+            String query = builder.build().getEncodedQuery();
+            //String input = "matricula=12200957&senha=123456";
+
+            OutputStream os = urlConnection.getOutputStream();
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+            writer.write(query);
+            writer.flush();
+            writer.close();
+            //os.write(input.getBytes());
+            os.flush();
+            os.close();
+            urlConnection.disconnect();
+
+            Context context = getApplicationContext();
+            CharSequence text = "Login com sucesso!";
+            int duration = Toast.LENGTH_SHORT;
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+
+        } catch (Exception e) {
+            CharSequence text = "Erro: " + e.getMessage();
+            System.out.println(text);
+            e.printStackTrace();
+            Context context = getApplicationContext();
+            int duration = Toast.LENGTH_SHORT;
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class Background extends AsyncTask<String, String, String>{
+        @Override
+        protected String doInBackground(String... params){
+            String data = "";
+            int tmp;
+
+            try {
+                URL url = new URL("http://rueba.site/api/token");
+                String urlParams = "matricula=12200957&senha=123456";
+
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setDoOutput(true);
+                OutputStream os = urlConnection.getOutputStream();
+                os.write(urlParams.getBytes());
+                os.flush();
+                os.close();
+                InputStream is = urlConnection.getInputStream();
+                while ((tmp=is.read())!=-1) {
+                    data += (char) tmp;
+                }
+                is.close();
+                urlConnection.disconnect();
+
+                Toast.makeText(getApplicationContext(), "Login OK!", Toast.LENGTH_SHORT).show();
+
+                return data;
+
+            } catch(Exception e){
+                //Toast.makeText(getApplicationContext(), "Erro!", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+                return "Exception: " + e.getMessage();
+            }
+
+
+        }
+    }

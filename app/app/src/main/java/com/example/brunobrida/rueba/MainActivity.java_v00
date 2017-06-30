@@ -1,5 +1,6 @@
 package com.example.brunobrida.rueba;
 
+import android.os.AsyncTask;
 import android.os.StrictMode;
 import java.net.URL;
 import java.net.HttpURLConnection;
@@ -50,7 +51,10 @@ public class MainActivity extends AppCompatActivity {
             }
             is.close();
             urlConnection.disconnect();
-        } catch (Exception e) {
+        } catch (
+                Exception e)
+
+        {
             Toast.makeText(getApplicationContext(), "Exception: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
@@ -74,4 +78,43 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+}
+
+public class loginPost extends AsyncTask<URL, Integer, Long> {
+
+    String data="";
+    String status = "";
+    int tmp;
+
+    protected Long doInBackground(URL... urls) {
+        try
+
+        {
+            EditText ID = (EditText) findViewById(R.id.ID);
+            String user = ID.getText().toString();
+            EditText passwd = (EditText) findViewById(R.id.password);
+            String password = passwd.getText().toString();
+
+            URL url = new URL("http://rueba.site/api/token");
+            String urlParams = "matricula=" + user + "&senha=" + password;
+
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setDoOutput(true);
+            OutputStream os = urlConnection.getOutputStream();
+            os.write(urlParams.getBytes());
+            os.flush();
+            os.close();
+            InputStream is = urlConnection.getInputStream();
+            while ((tmp = is.read()) != -1) {
+                data += (char) tmp;
+            }
+            is.close();
+            urlConnection.disconnect();
+        } catch (
+                Exception e)
+
+        {
+            Toast.makeText(getApplicationContext(), "Exception: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
 }
