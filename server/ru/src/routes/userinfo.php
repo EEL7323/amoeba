@@ -45,6 +45,7 @@ $app->post('/api/token', function ($request, $response, $args) use ($app){
         }
     	$resp["token"] = $token;
         $resp["matricula"] = $dadosUsuario['matricula'];
+        $resp["nome"] = $dadosUsuario['nome'];
         $resp["tipo_usuario"] = $dadosUsuario['tipo_usuario'];
     }
 
