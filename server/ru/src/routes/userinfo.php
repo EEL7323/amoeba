@@ -35,12 +35,12 @@ $app->post('/api/token', function ($request, $response, $args) use ($app){
     if($resp["status"]  == "OK"){
         if ($expira=="NAO")
         {
-            $token = generateToken($dadosUsuario['matricula'], $dadosUsuario['tipo_usuario'], False);
+            $token = generateToken($dadosUsuario['matricula'], $dadosUsuario['tipo_usuario'], $dadosUsuario['nome'], False);
             setcookie("token", $token, time() + (365*24*60*60), "/");
         }
         else
         {
-            $token = generateToken($dadosUsuario['matricula'], $dadosUsuario['tipo_usuario']);
+            $token = generateToken($dadosUsuario['matricula'], $dadosUsuario['tipo_usuario'], $dadosUsuario['nome'], True);
             setcookie("token", $token, time() + (120*60), "/");
         }
     	$resp["token"] = $token;
@@ -111,7 +111,7 @@ $app->get('/api/getCardapioDia', function ($request, $response, $args) use ($app
 //******************************************************************************
 //******************************************************************************
 
-function generateToken($matricula, $tipoUsuario, $expira = True)
+function generateToken($matricula, $tipoUsuario, $nome, $expira = True)
 {
     $now = new DateTime("now");
     if ($expira == True)
@@ -127,6 +127,7 @@ function generateToken($matricula, $tipoUsuario, $expira = True)
     $payload = [
         "usr" => $matricula,
         "typ" => $tipoUsuario,
+        "nome" => $nome,
         "nbf" => $now->getTimeStamp(),
         "exp" => $future->getTimeStamp()
     ];
