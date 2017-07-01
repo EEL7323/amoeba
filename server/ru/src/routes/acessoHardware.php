@@ -86,8 +86,15 @@ $app->get('/api/getCreditosCarteirinha/{identifier}', function ($request, $respo
         foreach ($rows as &$row) {
             $total_credits = $total_credits + $row['valor'];
         }
-        $resp['status'] = "RECARGA_PENDENTE";
-        $resp['credits'] = $total_credits;
+        if ($total_credits>0)
+        {
+            $resp['status'] = "RECARGA_PENDENTE";
+            $resp['credits'] = $total_credits;
+        }
+        else
+        {
+            $resp['status'] = "OK";
+        }
     }
 
     return $response->withJSON($resp);

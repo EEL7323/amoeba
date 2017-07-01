@@ -12,12 +12,15 @@ conexaoServidor::conexaoServidor (void)
 
 }
 
+//Realiza conexão com a API do servidor para atualizar o número de pessoas no restaurante
 int conexaoServidor::atualizaTotalUsuarios(int total)
 {
     readBuffer = "";
     cout << "Total de usuários: " << total<<endl;
     linkServidor = serverUrl + "/setNumeroUsuariosRestaurante/" + std::to_string(total);
     cout << "LinkServidor: " << linkServidor<<endl;
+
+    //Inicializa biblioteca cURL e configura os parâmetros de comunicação
     curl = curl_easy_init();
     if(curl)
     {
@@ -28,6 +31,7 @@ int conexaoServidor::atualizaTotalUsuarios(int total)
         curl_easy_cleanup(curl);
     }
 
+    //Processa resposta em formato JSON para um objeto
 	Json::Value root;
     Json::Reader reader;
 
@@ -53,6 +57,8 @@ int conexaoServidor::verificaCarteirinha(string carteirinha)
     cout << "Carteirinha: " << carteirinha <<endl;
     linkServidor = serverUrl + "/getCreditosCarteirinha/" + carteirinha;
     cout << "LinkServidor: " << linkServidor<<endl;
+
+    //Inicializa biblioteca cURL e configura os parâmetros de comunicação
     curl = curl_easy_init();
     if(curl)
     {
@@ -63,6 +69,7 @@ int conexaoServidor::verificaCarteirinha(string carteirinha)
         curl_easy_cleanup(curl);
     }
 
+    //Processa resposta em formato JSON para um objeto
     Json::Value root;
     Json::Reader reader;
 
@@ -84,6 +91,10 @@ int conexaoServidor::verificaCarteirinha(string carteirinha)
     {
         return 1;
     }
+    else if (root.get("status", "ERROR").asString()=="CARTEIRINHA_NOVA")
+    {
+        return 2;
+    }
 
     return 0;
 }
@@ -94,6 +105,8 @@ int conexaoServidor::confirmaRecarga(string carteirinha)
     cout << "Carteirinha: " << carteirinha <<endl;
     linkServidor = serverUrl + "/confirmaRecarga/" + carteirinha;
     cout << "LinkServidor: " << linkServidor<<endl;
+
+    //Inicializa biblioteca cURL e configura os parâmetros de comunicação
     curl = curl_easy_init();
     if(curl)
     {
@@ -104,6 +117,7 @@ int conexaoServidor::confirmaRecarga(string carteirinha)
         curl_easy_cleanup(curl);
     }
 
+    //Processa resposta em formato JSON para um objeto
     Json::Value root;
     Json::Reader reader;
 

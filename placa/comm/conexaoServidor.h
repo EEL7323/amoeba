@@ -7,6 +7,7 @@
 
 using namespace std;
 
+//Endereço do servidor
 static std::string serverUrl = "http://rueba.site/api";
 
 class conexaoServidor
