@@ -22,5 +22,23 @@ int main()
     while(!lc.carteirinhaNoLeitor())
     {}
 
-    cout << "Carteirinha encontrada: " << lc.getCarteirinha() << endl;
+    if (lc.abreCarteirinha())
+    {
+        if (lc.updateCreditos(3))
+        {
+            cout << "Créditos adicionados com sucesso!" << endl;
+        } else
+        {
+            cout << "Erro ao atualizar créditos na cairteirinha!" << endl;
+        }
+        if (lc.acessoRestaurante())
+        {
+            cout << "Acesso ao restaurante permitido! Créditos restantes: " << lc.passesRestantes << endl;
+        } else
+        {
+            cout << "Não há créditos suficientes na carteirinha" << endl;
+        }
+    }
+    lc.fechaCarteirinha();
+
 }

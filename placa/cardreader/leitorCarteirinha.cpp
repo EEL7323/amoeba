@@ -8,6 +8,10 @@ da carteirinha.
 leitorCarteirinha::leitorCarteirinha (void)
 {
     mfrc.PCD_Init();
+
+    for (byte i = 0; i < MFRC522::MF_KEY_SIZE; i++) {
+          key.keyByte[i] = knownKeys[0][i];
+      }
 }
 
 int leitorCarteirinha::carteirinhaNoLeitor()
@@ -37,13 +41,91 @@ string leitorCarteirinha::getCarteirinha()
 
 int leitorCarteirinha::updateCreditos(int creditos)
 {
-    if(!mfrc.PICC_IsNewCardPresent())
+    byte block = 1;
+    byte status;
+    int result = 1;
+    long valor = 0L;
+
+    status = mfrc.MIFARE_GetValue(block, &valor);
+    if (status != MFRC522::STATUS_OK) {
+        result = 0;
+    }
+    else {
+        valor = valor+creditos;
+
+        status = mfrc.MIFARE_SetValue(block, valor);
+        if (status != MFRC522::STATUS_OK) {
+            result = 0;
+        }
+        else {
+            result = 1;
+        }
+    }
+
+    return result;
+}
+
+int leitorCarteirinha::acessoRestaurante()
+{
+    byte block = 1;
+    byte status;
+    int result = 1;
+    long valor = 0L;
+
+
+    status = mfrc.MIFARE_GetValue(block, &valor);
+    if (status != MFRC522::STATUS_OK) {
+        result = 0;
+    }
+    else {
+      if (valor>0)
+      {
+        valor = valor-1;
+        passesRestantes = valor;
+
+        status = mfrc.MIFARE_SetValue(block, valor);
+        if (status != MFRC522::STATUS_OK) {
+            result = 0;
+        }
+        else {
+            result = 1;
+        }
+      }
+      else
+        result = 0;
+    }
+
+    return result;
+}
+
+
+int leitorCarteirinha::abreCarteirinha()
+{
+    byte block = 1;
+    byte status;
+    int result = 1;
+
+    if(!mfrc.PICC_ReadCardSerial())
+    {
+        printf("Err.\n");
         return 0;
+    }
 
-    if( !mfrc.PICC_ReadCardSerial())
-        return 0;
+    status = mfrc.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, block, &key, &(mfrc.uid));
 
-    //PICC_DumpMifareClassicSectorToSerial(mfrc.uid, )
+    if (status != MFRC522::STATUS_OK) {
+        result = 0;
+    } else {
+        result = 1;
+    }
 
-    return 0;
+    return result;
+}
+
+
+int leitorCarteirinha::fechaCarteirinha()
+{
+    mfrc.PICC_HaltA();       // Halt PICC
+    mfrc.PCD_StopCrypto1();  // Stop encryption on PCD
+    return 1;
 }
