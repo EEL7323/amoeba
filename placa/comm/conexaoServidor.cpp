@@ -89,11 +89,7 @@ int conexaoServidor::verificaCarteirinha(string carteirinha)
     }
     else if (root.get("status", "ERROR").asString()=="RECARGA_PENDENTE")
     {
-        return 1;
-    }
-    else if (root.get("status", "ERROR").asString()=="CARTEIRINHA_NOVA")
-    {
-        return 2;
+        return root.get("credits", "ERROR").asInt();
     }
 
     return 0;
