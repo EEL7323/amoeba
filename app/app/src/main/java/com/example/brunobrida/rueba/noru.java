@@ -1,13 +1,10 @@
 package com.example.brunobrida.rueba;
 
-import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
-import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -15,73 +12,29 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.os.AsyncTask;
-import android.util.Log;
 
-import org.json.JSONObject;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 
 /**
- * Created by bruno.brida on 07/05/2017.
+ * Created by bruno.brida on 30/06/2017.
  */
 
-public class home extends MainActivity{
+public class noru extends MainActivity{
 
-    Context ctx = this;
     String serverResponse = "";
-    String creditos = "";
     TcpClient mTcpClient;
-    String connected_users;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.home);
+        setContentView(R.layout.noru);
 
-        TextView textView = (TextView) findViewById(R.id.welcome_entrar);
-        textView.setText("Bem-vindo, " + nome + "!");
+        TextView textView = (TextView) findViewById(R.id.welcome_sair);
+        textView.setText("Bem-vindo ao RU da UFSC, " + nome + "!");
 
-        String filename = "creditos";
-        String outputString = "0";
-        FileOutputStream outputStream;
-        File file = this.getFileStreamPath(filename);
-
-        if(file == null || !file.exists()) {
-            try {
-                outputStream = openFileOutput(filename, this.MODE_PRIVATE);
-                outputStream.write(outputString.getBytes());
-                outputStream.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        try {
-            URL url = new URL("http://rueba.site/api/numeroUsuariosNoRestaurante");
-            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setDoInput(true);
-            urlConnection.setRequestMethod("GET");
-            urlConnection.setRequestProperty("Authorization", "Bearer " + token);
-            InputStream is = urlConnection.getInputStream();
-            while ((tmp = is.read()) != -1) {
-                data += (char) tmp;
-            }
-            is.close();
-            urlConnection.disconnect();
-        } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), "Exception: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-
-        try {
-            JSONObject jObject = new JSONObject(data);
-            connected_users = jObject.getString("numUsuarios");
-        } catch(Exception e) {
-            Toast.makeText(getApplicationContext(), "Exception: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-
-        TextView textView2 = (TextView) findViewById(R.id.connected_users);
-        textView2.setText("Há " + connected_users + " pessoas no RU nesse momento.");
-
-        new ConnectTask().execute("");
+        new noru.ConnectTask().execute("");
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -124,49 +77,27 @@ public class home extends MainActivity{
                 Toast.makeText(getApplicationContext(), "Seu saldo é de: " + inputString + " passe(s).", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.item_option2:
-                Intent i = new Intent(home.this, comprar.class);
+                Intent i = new Intent(noru.this, comprar.class);
                 startActivity(i);
                 return true;
             case R.id.item_option3:
-                Intent intent = new Intent(Intent.ACTION_MAIN);
-                intent.addCategory(Intent.CATEGORY_HOME);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
+                Toast.makeText(getApplicationContext(), "Você deve sair digitando o código de saida!", Toast.LENGTH_SHORT).show();
             default:
                 return super.onOptionsItemSelected(menu);
         }
     }
 
-    public void onClickEntrar(View v){
+    public void onClickSair(View v){
 
         if(TcpClient.catracaAvailable) {
-            EditText entry_code = (EditText) findViewById(R.id.entry_code);
-            String codin = entry_code.getText().toString();
+            EditText exit_code = (EditText) findViewById(R.id.exit_code);
+            String codout = exit_code.getText().toString();
 
-            final String filename = "creditos";
-            String inputString = "";
-            FileInputStream inputStream;
 
-            try {
-                inputStream = openFileInput(filename);
-                byte[] input = new byte[inputStream.available()];
-                inputString = "";
-                while (inputStream.read(input) != -1) {
-                }
-                inputString += new String(input);
-                inputStream.close();
-            } catch (Exception e) {
-                e.printStackTrace();
+            if (mTcpClient != null) {
+
+                mTcpClient.sendMessage("0&" + codout + "&" + matricula);
             }
-            creditos = inputString;
-
-            if (Integer.parseInt(creditos) <= 0)
-                Toast.makeText(getApplicationContext(), "Seu saldo é insuficiente para entrar no RU.", Toast.LENGTH_SHORT).show();
-            else {
-                if (mTcpClient != null) {
-
-                    mTcpClient.sendMessage("1&" + codin + "&" + matricula + "&" + creditos);
-                }
 
                 Toast.makeText(getApplicationContext(), "Processando...", Toast.LENGTH_SHORT).show();
 
@@ -178,25 +109,13 @@ public class home extends MainActivity{
 
                         if (!serverResponse.equals("")) {
                             if (Integer.parseInt(serverResponse) == 1) {
-                                Toast.makeText(getApplicationContext(), "Entrada liberada!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "Saída liberada!", Toast.LENGTH_SHORT).show();
                                 serverResponse = "";
                                 if (mTcpClient != null) {
                                     mTcpClient.stopClient();
                                 }
-
-                                tmp = Integer.parseInt(creditos) - 1;
-
-                                try {
-                                    File file = ctx.getFileStreamPath(filename);
-                                    file.delete();
-                                    outputStream = openFileOutput(filename, ctx.MODE_PRIVATE);
-                                    outputStream.write(Integer.toString(tmp).getBytes());
-                                    outputStream.close();
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                                Toast.makeText(getApplicationContext(), "Seu saldo atual é de: " + tmp + " passe(s).", Toast.LENGTH_SHORT).show();
-                                Intent i = new Intent(home.this, noru.class);
+                                Toast.makeText(getApplicationContext(), "Obrigado e volte sempre!.", Toast.LENGTH_SHORT).show();
+                                Intent i = new Intent(noru.this, home.class);
                                 startActivity(i);
                             } else {
                                 Toast.makeText(getApplicationContext(), "Captcha inválido. Tente novamente.", Toast.LENGTH_SHORT).show();
@@ -206,7 +125,7 @@ public class home extends MainActivity{
                                     mTcpClient.stopClient();
                                 }
 
-                                new ConnectTask().execute("");
+                                new noru.ConnectTask().execute("");
 
                                 if (TcpClient.catracaAvailable) {
                                     Toast.makeText(getApplicationContext(), "Aberto conexão.", Toast.LENGTH_SHORT).show();
@@ -224,7 +143,7 @@ public class home extends MainActivity{
                                 mTcpClient.stopClient();
                             }
 
-                            new ConnectTask().execute("");
+                            new noru.ConnectTask().execute("");
 
                             if (TcpClient.catracaAvailable) {
                                 Toast.makeText(getApplicationContext(), "Aberto conexão.", Toast.LENGTH_SHORT).show();
@@ -236,7 +155,6 @@ public class home extends MainActivity{
                         }
                     }
                 }, 3000);
-            }
         }
         else {
 
@@ -248,7 +166,7 @@ public class home extends MainActivity{
 
             Toast.makeText(getApplicationContext(), "Procurando a catraca...", Toast.LENGTH_SHORT).show();
 
-            new ConnectTask().execute("");
+            new noru.ConnectTask().execute("");
 
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -297,7 +215,6 @@ public class home extends MainActivity{
             serverResponse = values[0];
 
         }
-
     }
 
 }

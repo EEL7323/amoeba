@@ -17,6 +17,10 @@ public class MainActivity extends AppCompatActivity {
 
     String data="";
     String status = "";
+    public static String matricula = "";
+    public static String tipo_usuario = "";
+    public static String token = "";
+    public static String nome = "";
     int tmp;
 
     @Override
@@ -57,6 +61,10 @@ public class MainActivity extends AppCompatActivity {
         try {
             JSONObject jObject = new JSONObject(data);
             status = jObject.getString("status");
+            matricula = jObject.getString("matricula");
+            tipo_usuario = jObject.getString("tipo_usuario");
+            token = jObject.getString("token");
+            nome = jObject.getString("nome");
         } catch(Exception e) {
             Toast.makeText(getApplicationContext(), "Exception: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
