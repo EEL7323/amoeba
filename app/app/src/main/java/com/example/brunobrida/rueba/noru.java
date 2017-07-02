@@ -114,7 +114,7 @@ public class noru extends MainActivity{
                                 if (mTcpClient != null) {
                                     mTcpClient.stopClient();
                                 }
-                                Toast.makeText(getApplicationContext(), "Obrigado e volte sempre!.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "Obrigado e volte sempre!", Toast.LENGTH_SHORT).show();
                                 Intent i = new Intent(noru.this, home.class);
                                 startActivity(i);
                             } else {

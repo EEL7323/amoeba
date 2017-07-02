@@ -50,6 +50,7 @@
         android:layout_height="43dp"
         android:ems="10"
         android:inputType="number"
+        android:gravity="center_vertical|center_horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintLeft_toLeftOf="parent"
