@@ -32,6 +32,7 @@ class leitorCarteirinha
 		int passesRestantes;
 		int carteirinhaNoLeitor();
 		string getCarteirinha();
+        long getNumCarteirinha();
 		int updateCreditos(int creditos);
 		int acessoRestaurante();
 		int abreCarteirinha();

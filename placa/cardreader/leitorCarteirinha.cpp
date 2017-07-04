@@ -36,6 +36,16 @@ string leitorCarteirinha::getCarteirinha()
 	return carteirinha;
 }
 
+long leitorCarteirinha::getNumCarteirinha()
+{
+    string c_string = getCarteirinha();
+
+    long carteirinha = stol(c_string,nullptr,16);
+
+    return carteirinha;
+}
+
+
 int leitorCarteirinha::updateCreditos(int creditos)
 {
     byte block = 1;

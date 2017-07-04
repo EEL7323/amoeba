@@ -10,8 +10,6 @@ int main()
         exit(1);
     }
 	//Definição das variáveis de estado da máquina
-	int estado = 0;
-	int retorno =0;
     string tmp;
     string carteirinha;
 
@@ -24,7 +22,7 @@ int main()
 
     if (lc.abreCarteirinha())
     {
-        cout << "Carteirinha: " << getCarteirinha() << endl;
+        cout << "Carteirinha: " << lc.getCarteirinha() << endl;
         if (lc.updateCreditos(3))
         {
             cout << "Créditos adicionados com sucesso!" << endl;
