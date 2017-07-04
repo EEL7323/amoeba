@@ -70,7 +70,7 @@ void BinaryTree::auxInserir (Node *& r, int val){
 
 void BinaryTree::auxRemoverNodo (Node *& r, int val){
 	if ( r == 0 )
-		cout << val << "elemento nao encontrado" << endl;
+        r=0;//cout << val << "elemento nao encontrado" << endl;
 	else
 		if (val < r->getMatricula())         // busca a esquerda
 			auxRemoverNodo ( r->esquerda, val );
