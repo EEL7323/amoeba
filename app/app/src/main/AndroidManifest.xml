@@ -21,6 +21,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".home"></activity>
+        <activity android:name=".comprar"></activity>
+        <activity android:name=".noru"></activity>
     </application>
 
 </manifest>

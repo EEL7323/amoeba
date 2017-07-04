@@ -5,11 +5,15 @@
 
     <item
         android:id="@+id/item_option1"
-        android:title="Ver créditos"
+        android:title="Consultar créditos"
         />
     <item
         android:id="@+id/item_option2"
         android:title="Comprar créditos"
+        />
+    <item
+        android:id="@+id/item_option3"
+        android:title="Sair"
         />
 
 </menu>
