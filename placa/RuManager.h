@@ -14,12 +14,25 @@
 #ifndef RUMANAGER_H
 #define RUMANAGER_H
 
+#include "Node.h"
+#include "BinaryTree.h"
+#include <string>
+#include "conexaoServidor.h"
 class RuManager {
+    int numUsers;
+    BinaryTree dados;
+    int matricula;
+    conexaoServidor cs;
+    
+    
 public:
     RuManager();
-    RuManager(const RuManager& orig);
     virtual ~RuManager();
-private:
+    void entrouAluno(int novaMatricula);
+    void saiuAluno(int novaMatricula);
+    int getNumUsers();
+    bool estaNoRu(int matricula);
+
 
 };
 

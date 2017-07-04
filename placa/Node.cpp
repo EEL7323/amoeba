@@ -1,14 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/* 
- * File:   Node.cpp
- * Author: mvalente
- * 
- * Created on May 15, 2017, 3:35 PM
+/**
+ * @file:   Node.cpp
+ *
+ * @section DESCRIPTION
+ * A classe Node define o nodo da árvore binária. Foi utilizada o nodo apresentado em sala de aula pelo professor.
+ *
+ *
+ *
+ *Created on June 30, 2017, 5:24 PM
  */
 
 #include "Node.h"
