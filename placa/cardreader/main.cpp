@@ -24,6 +24,7 @@ int main()
 
     if (lc.abreCarteirinha())
     {
+        cout << "Carteirinha: " << getCarteirinha() << endl;
         if (lc.updateCreditos(3))
         {
             cout << "Créditos adicionados com sucesso!" << endl;

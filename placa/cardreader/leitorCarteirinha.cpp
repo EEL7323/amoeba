@@ -21,9 +21,6 @@ int leitorCarteirinha::carteirinhaNoLeitor()
 
 string leitorCarteirinha::getCarteirinha()
 {
-    if( !mfrc.PICC_ReadCardSerial())
-        return "ERRO";
-
     char code[10] = "";
 
     for(byte i = 0; i < mfrc.uid.size; ++i){
