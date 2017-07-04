@@ -1,14 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
- * File:   AcessoCard.cpp
- * Author: mvalente
+/**
+ * @file:   AcessoCard.cpp
+ * @author: mvalente
+ * @section DESCRIPTION
+ * A classe AcessoCard controla a comunicação entre carteirinha e a placa se utilizand de um ponteiro de RuManager para controlar o acesso de *usuários ao refeitório.
  *
- * Created on June 30, 2017, 5:24 PM
+ *
+ *
+ *Created on June 30, 2017, 5:24 PM
  */
 
 #include "AcessoCard.h"
@@ -23,12 +21,21 @@
 #include "conexaoServidor.h"
 using namespace std;
 
+/**
+ * Construtor que recebe o endereço do RuManger.
+ *
+ * @param *novoManager endereço do RuManeger a ser utilizado.
+ */
 
 AcessoCard::AcessoCard (RuManager *novoManager)
 {
     manager = novoManager;
 }
-
+/**
+ * Construtor nulo.
+ *
+ *
+ */
 AcessoCard::AcessoCard ()
 {
     manager = 0;
@@ -40,7 +47,9 @@ AcessoCard::~AcessoCard()
 }
 
 //---------------------------------------------------------------------------//
-
+/**
+ * A função libera a cacatraca seria implementada caso o projeto tivesse continuade enviando um sinal para o controle da catatraca de modo a fazer a liberação.
+ */
 
 void AcessoCard::liberaEntrada()
 {
@@ -48,7 +57,14 @@ void AcessoCard::liberaEntrada()
 }
 
 //---------------------------------------------------------------------------//
-
+//---------------------------------------------------------------------------//
+/**
+ * A função rodar serve como o main para a therad relativa ao cartão.
+ *
+ *
+ *
+ *
+ */
 void AcessoCard::rodar()
 {
     if (geteuid() != 0)

@@ -1,18 +1,35 @@
-#include "conexaoServidor.h"
+/**
+ * @file:   conexaoServidor.cpp
+ * @section DESCRIPTION
+ * A classe conexaoServidor controla toda a comunicao entre o server e a placa.
+ *
+ *
+ *
+ *Created on June 30, 2017, 5:24 PM
+ */
 
+
+#include "conexaoServidor.h"
 
 static size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp)
 {
     ((std::string*)userp)->append((char*)contents, size * nmemb);
     return size * nmemb;
 }
-
+/**
+ * Construtor nulo.
+ *
+ *
+ */
 conexaoServidor::conexaoServidor (void)
 {
 
 }
-
-//Realiza conexão com a API do servidor para atualizar o número de pessoas no restaurante
+/**
+ * A função atualizaTotalUsuarios realiza conexão com a API do servidor para atualizar o número de pessoas no restaurante
+ * @param total numero de usuarios a ser atualizado.
+ * @return retorna 1 se a conexão foi feita com sucesso e 0 caso contrário.
+ */
 int conexaoServidor::atualizaTotalUsuarios(int total)
 {
     readBuffer = "";
@@ -50,7 +67,11 @@ int conexaoServidor::atualizaTotalUsuarios(int total)
 
     return 0;
 }
-
+/**
+ * A função verificaCarteirinha realiza conexão com a API do servidor para verificar se a carterinha deve ser regarrecada.
+ * @param carterinha recebe o código da carterinha
+ * @return retorna 1 se a conexão foi feita com sucesso e 0 caso contrário.
+ */
 int conexaoServidor::verificaCarteirinha(string carteirinha)
 {
     readBuffer = "";
@@ -94,7 +115,11 @@ int conexaoServidor::verificaCarteirinha(string carteirinha)
 
     return 0;
 }
-
+/**
+ * A função confirmaRecarga realiza conexão com a API do servidor avisar que a recarga foi realiza.
+ * @param carterinha recebe o código da carterinha
+ * @return retorna 1 se a conexão foi feita com sucesso e 0 caso contrário.
+ */
 int conexaoServidor::confirmaRecarga(string carteirinha)
 {
     readBuffer = "";

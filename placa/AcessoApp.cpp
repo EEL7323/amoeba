@@ -1,14 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
- * File:   AcessoApp.cpp
- * Author: mvalente
+/**
+ * @file:   AcessoApp.cpp
+ * @author: mvalente
+ * @section DESCRIPTION 
+ * A classe AcessoApp controla a comunicação entre o App e a placa se utilizand de um ponteiro de RuManager para controlar o acesso de *usuários ao refeitório.
  *
- * Created on June 30, 2017, 5:24 PM
+ *
+ *
+ *Created on June 30, 2017, 5:24 PM
  */
 
 #include "AcessoApp.h"
@@ -21,12 +19,20 @@
 
 using namespace std;
 
-
+/**
+ * Construtor que recebe o endereço do RuManger.
+ *
+ * @param *novoManager endereço do RuManeger a ser utilizado.
+ */
 AcessoApp::AcessoApp (RuManager *novoManager)
 {
     manager = novoManager;
 }
-
+/**
+ * Construtor nulo.
+ *
+ *
+ */
 AcessoApp::AcessoApp ()
 {
     manager = 0;
@@ -38,7 +44,13 @@ AcessoApp::~AcessoApp()
 }
 
 //---------------------------------------------------------------------------//
-
+/**
+ * A função generate captcha gera um captcha numérico de um tamanho definido.
+ *
+ * @param n tamanho do captcha a ser retornado.
+ *
+ *@return Um string com o número de caracteres definidos por n.
+ */
 string AcessoApp::generateCaptcha(int n)
 {
     
@@ -57,28 +69,25 @@ string AcessoApp::generateCaptcha(int n)
     
     return captcha;
 }
+
 //---------------------------------------------------------------------------//
 
-string AcessoApp::removeCreditos(string creditos) //INUTILIZADA DEVIDO A UPDATES
-{
-    
-    
-    int value = atoi(creditos.c_str());
-    value = value - 1;
-    creditos = to_string(value);
-    return creditos;
-    
-}
-//---------------------------------------------------------------------------//
-
-
+/**
+ * A função libera a cacatraca seria implementada caso o projeto tivesse continuade enviando um sinal para o controle da catatraca de modo a fazer a liberação.
+ */
 void AcessoApp::liberaEntrada()
 {
  //LIBERAR A CATRACA
 }
 
 //---------------------------------------------------------------------------//
-
+/**
+ * A função split devolve um vector de string a partir de uma string original e um delimitator
+ *
+ * @param  str string a ser dividida
+ * @param delim caracter delimitador
+ *@return vector com as strings devidamente separadas.
+ */
 vector<string> split(const string& str, const string& delim)
 {
     vector<string> tokens;
@@ -96,7 +105,13 @@ vector<string> split(const string& str, const string& delim)
 }
 
 //---------------------------------------------------------------------------//
-
+/**
+ * A função rodar serve como o main para a therad relativa ao aplicativo.
+ *
+ *
+ *
+ *
+ */
 void AcessoApp::rodar()
 {
     std::cout << "running....\n";

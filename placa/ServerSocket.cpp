@@ -1,9 +1,11 @@
-// Implementation of the ServerSocket class
-
-#include "ServerSocket.h"
-#include "SocketException.h"
-
-
+/**
+ * @file:   ServerSocket.cpp
+ * @author: Rob Tougher
+ * @section DESCRIPTION
+ * Socket de servidor: http://www.unixuser.org/lg/issue74/tougher.html
+ *
+ *
+ */
 ServerSocket::ServerSocket ( int port )
 {
   if ( ! Socket::create() )

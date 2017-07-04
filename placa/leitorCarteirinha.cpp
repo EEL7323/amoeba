@@ -1,10 +1,21 @@
-#include "leitorCarteirinha.h"
 
-/*
-Aqui é destinado para o momento de leitura
-da carteirinha.
+/**
+ * @file:   leitorCarteirnha.cpp
+ * @section DESCRIPTION
+ * A classe leitorCarterinha controla o leitor de RFID.
+ *
+ *
+ *
+ *Created on June 30, 2017, 5:24 PM
  */
 
+#include "leitorCarteirinha.h"
+
+/**
+ * Construtor inicializa o leitor.
+ *
+ *
+ */
 leitorCarteirinha::leitorCarteirinha (void)
 {
     mfrc.PCD_Init();
@@ -13,12 +24,21 @@ leitorCarteirinha::leitorCarteirinha (void)
           key.keyByte[i] = knownKeys[0][i];
       }
 }
-
+/**
+ * A função carterinhaNoLeitor verifica se há alguma carterinha no leitor de RFID
+ *
+ * @return retorna 1 se houver carterinha e 0 caso contrário.
+ */
 int leitorCarteirinha::carteirinhaNoLeitor()
 {
 	return mfrc.PICC_IsNewCardPresent();
 }
 
+/**
+ * A função getCarteirinha devolve o id da carterinha no leitor
+ *
+ * @return retorna o id da carterinha no leitor
+ */
 string leitorCarteirinha::getCarteirinha()
 {
     if( !mfrc.PICC_ReadCardSerial())
@@ -38,7 +58,13 @@ string leitorCarteirinha::getCarteirinha()
     string carteirinha(code);
 	return carteirinha;
 }
-
+/**
+ * A função updateCreditos atualiza os creditos da carterinha
+ *
+ * @param creditos informa o numero de creditos a ser adicionado na carterinha
+ *
+ * @return retorna 1 para operação realizada com sucesso e 0 caso contrário
+ */
 int leitorCarteirinha::updateCreditos(int creditos)
 {
     byte block = 1;
@@ -64,7 +90,13 @@ int leitorCarteirinha::updateCreditos(int creditos)
 
     return result;
 }
-
+/**
+ * A função acessoRestaurante informa que o aluno pode acessar ao restaurante e diminui os créditos
+ *
+ *
+ *
+ * @return retorna 1 para operação realizada com sucesso e 0 caso o aluno não tenha creditos o suficiente
+ */
 int leitorCarteirinha::acessoRestaurante()
 {
     byte block = 1;
@@ -98,7 +130,12 @@ int leitorCarteirinha::acessoRestaurante()
     return result;
 }
 
-
+/**
+ * A função abreCarteirnha permite a escrita na carterinha
+ *
+ *
+ * @return retorna 1 para operação realizada com sucesso e 0 caso contrário
+ */
 int leitorCarteirinha::abreCarteirinha()
 {
     byte block = 1;
@@ -122,7 +159,12 @@ int leitorCarteirinha::abreCarteirinha()
     return result;
 }
 
-
+/**
+ * A função fechaCarteirnha bloqueia a escrita na carterinha
+ *
+ *
+ * @return retorna 1 para operação realizada com sucesso e 0 caso contrário
+ */
 int leitorCarteirinha::fechaCarteirinha()
 {
     mfrc.PICC_HaltA();       // Halt PICC

@@ -1,6 +1,11 @@
-// Implementation of the Socket class.
-
-
+/**
+ * @file:   Socket.cpp
+ * @author: Rob Tougher
+ * @section DESCRIPTION
+ * Socket: http://www.unixuser.org/lg/issue74/tougher.html
+ *
+ *
+ */
 #include "Socket.h"
 #include "string.h"
 #include <string.h>
